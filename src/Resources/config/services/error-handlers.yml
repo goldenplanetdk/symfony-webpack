@@ -1,0 +1,17 @@
+services:
+
+    gp_webpack.error_handler.default:
+        class: GoldenPlanet\WebpackBundle\ErrorHandler\DefaultErrorHandler
+        public: false
+
+    gp_webpack.error_handler.suppressing:
+        class: GoldenPlanet\WebpackBundle\ErrorHandler\SuppressingErrorHandler
+        public: false
+        arguments:
+            - '@logger'
+
+    gp_webpack.error_handler.ignore_unknowns:
+        class: GoldenPlanet\WebpackBundle\ErrorHandler\UnknownReferenceIgnoringErrorHandler
+        public: false
+        arguments:
+            - '@logger'

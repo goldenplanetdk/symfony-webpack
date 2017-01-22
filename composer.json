@@ -1,0 +1,42 @@
+{
+    "name": "goldenplanetdk/webpack-bundle",
+    "description": "Bundle to Integrate Webpack to Symfony",
+    "keywords": ["assets", "assetic", "symfony", "webpack", "amd", "commonjs"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Steven Pribilinskiy",
+            "email": "stepan@goldenplanet.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "^2.7|^3.0",
+        "symfony/templating": "^2.1|^3.0",
+        "symfony/console": "^2.5|^3.0",
+        "symfony/routing": "^2.7|^3.0",
+        "twig/twig": "^1.27|^2.0",
+        "maba/dependency-injection-extra": "^0.1.1",
+        "symfony/process": "^2.5|^3.0",
+        "symfony/dependency-injection": "^2.6|^3.0",
+        "symfony/twig-bundle": "^2.3|^3.0",
+        "symfony/monolog-bundle": "^2.3|^3.0",
+        "satooshi/php-coveralls": "^1.0"
+    },
+    "require-dev": {
+        "codeception/codeception": "~2.1.4",
+        "symfony/translation": "^2.7|^3.0",
+        "symfony/asset": "^2.7|^3.0",
+        "doctrine/annotations": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "GoldenPlanet\\WebpackBundle\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fixtures\\GoldenPlanet\\": "tests/functional/Fixtures/src"
+        }
+    }
+}

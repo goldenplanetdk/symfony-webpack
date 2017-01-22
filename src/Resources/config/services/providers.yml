@@ -1,0 +1,56 @@
+imports:
+    - { resource: 'parameters.yml' }
+
+services:
+
+    gp_webpack.asset_provider.array_collection_resource:
+        class: GoldenPlanet\WebpackBundle\AssetProvider\CollectionResource\ArrayCollectionResource
+        public: false
+
+    gp_webpack.asset_provider.dynamic:
+        class: GoldenPlanet\WebpackBundle\AssetProvider\DynamicAssetProvider
+        public: false
+
+    gp_webpack.collection_resource.twig_files:
+        class: GoldenPlanet\WebpackBundle\AssetProvider\CollectionResource\DirectoryResource
+        public: false
+        arguments:
+            - '*.twig'
+
+    gp_webpack.collection_resource.twig_bundles:
+        class: GoldenPlanet\WebpackBundle\AssetProvider\CollectionResource\BundlesDirectoriesResource
+        public: false
+        arguments:
+            - '@kernel'
+            - /Resources/views
+
+    gp_webpack.asset_provider.dynamic_list:
+        class: GoldenPlanet\WebpackBundle\AssetProvider\CollectionResourceAssetProvider
+        public: false
+        arguments: 
+            - '@gp_webpack.asset_provider.array_collection_resource'
+            - '@gp_webpack.asset_provider.dynamic'
+
+    gp_webpack.asset_provider.twig_file:
+        class: GoldenPlanet\WebpackBundle\AssetProvider\TwigAssetProvider
+        tags:
+            - { name: gp_webpack.asset_provider, type: twig_file }
+        arguments: 
+            - '@twig'
+            - '@gp_webpack.error_handler'
+
+    gp_webpack.asset_provider.twig_directory:
+        class: GoldenPlanet\WebpackBundle\AssetProvider\CollectionResourceAssetProvider
+        tags:
+            - { name: gp_webpack.asset_provider, type: twig_directory }
+        arguments:
+            - '@gp_webpack.collection_resource.twig_files'
+            - '@gp_webpack.asset_provider.twig_file'
+
+    gp_webpack.asset_provider.twig_bundles:
+        class: GoldenPlanet\WebpackBundle\AssetProvider\CollectionResourceAssetProvider
+        tags:
+            - { name: gp_webpack.asset_provider, type: twig_bundles }
+        arguments:
+            - '@gp_webpack.collection_resource.twig_bundles'
+            - '@gp_webpack.asset_provider.twig_directory'

@@ -1,0 +1,27 @@
+imports: [{resource: 'common.yml'}]
+
+golden_planet_webpack:
+    asset_providers:
+        -
+            type: twig_directory
+            resource: %kernel.root_dir%/Resources/views
+    config:
+        parameters:
+            extract_css: true
+            public_path: /assets/
+            path: %kernel.root_dir%/../web/assets/
+    twig:
+        suppress_errors: false
+    aliases:
+        register_bundles:
+            - GoldenPlanetWebpackTestBundle
+        path_in_bundle: /Resources/additional-assets
+        additional:
+            'a': %kernel.root_dir%/../src/WebpackTestBundle/Resources/assets
+            'app': %kernel.root_dir%/Resources/assets
+    bin:
+        webpack:
+            executable:
+                - node
+                - "--max-old-space-size=8192"
+                - node_modules/webpack/bin/webpack.js

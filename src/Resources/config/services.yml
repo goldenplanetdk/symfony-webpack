@@ -1,0 +1,108 @@
+imports:
+    - { resource: 'parameters.yml' }
+    - { resource: 'services/commands.yml' }
+    - { resource: 'services/error-handlers.yml' }
+    - { resource: 'services/providers.yml' }
+    - { resource: 'services/setup-command.yml' }
+
+services:
+
+    gp_webpack.alias_manager:
+        class: GoldenPlanet\WebpackBundle\Service\AliasManager
+        public: false
+        arguments:
+            - '@file_locator'
+            - '%gp_webpack.aliases.register_bundles%'
+            - '%gp_webpack.aliases.path_in_bundle%'
+            - '%gp_webpack.aliases.additional%'
+
+    gp_webpack.asset_collector:
+        class: GoldenPlanet\WebpackBundle\Service\AssetCollector
+        public: false
+        arguments:
+            - '@gp_webpack.asset_provider.dynamic_list'
+            - '%gp_webpack.provider_config%'
+
+    gp_webpack.asset_locator:
+        class: GoldenPlanet\WebpackBundle\Service\AssetLocator
+        arguments:
+            - '@gp_webpack.alias_manager'
+
+    gp_webpack.asset_name_generator:
+        class: GoldenPlanet\WebpackBundle\Service\AssetNameGenerator
+        public: false
+
+    gp_webpack.asset_manager:
+        class: GoldenPlanet\WebpackBundle\Service\AssetManager
+        arguments:
+            - '@gp_webpack.manifest_storage'
+            - '@gp_webpack.asset_name_generator'
+            - '@gp_webpack.entry_file_manager'
+
+    gp_webpack.asset_resolver:
+        class: GoldenPlanet\WebpackBundle\Service\AssetResolver
+        public: false
+        arguments: 
+            - '@gp_webpack.asset_locator'
+            - '@gp_webpack.entry_file_manager'
+
+    gp_webpack.entry_file_manager:
+        class: GoldenPlanet\WebpackBundle\Service\EntryFileManager
+        public: false
+        arguments: 
+            - '%gp_webpack.entry_file.enabled_extensions%'
+            - '%gp_webpack.entry_file.disabled_extensions%'
+            - '%gp_webpack.entry_file.type_map%'
+
+    gp_webpack.manifest_storage:
+        class: GoldenPlanet\WebpackBundle\Service\ManifestStorage
+        public: false
+        arguments: 
+            - '%gp_webpack.manifest_file_path%'
+
+    gp_webpack.webpack_compiler:
+        class: GoldenPlanet\WebpackBundle\Compiler\WebpackCompiler
+        public: false
+        arguments:
+            - '@gp_webpack.webpack_config_manager'
+            - '%gp_webpack.json_manifest_file_path%'
+            - '@gp_webpack.manifest_storage'
+            - '%gp_webpack.working_dir%'
+            - '@logger'
+            - '%gp_webpack.bin.webpack.executable%'
+            - '%gp_webpack.bin.webpack.tty_prefix%'
+            - '%gp_webpack.bin.webpack.arguments%'
+            - '%gp_webpack.bin.dev_server.executable%'
+            - '%gp_webpack.bin.dev_server.tty_prefix%'
+            - '%gp_webpack.bin.dev_server.arguments%'
+            - '%gp_webpack.bin.disable_tty%'
+
+    gp_webpack.webpack_config_dumper:
+        class: GoldenPlanet\WebpackBundle\Config\WebpackConfigDumper
+        public: false
+        arguments:
+            - '%gp_webpack.webpack_entry_config_path%'
+            - '%gp_webpack.webpack_config_path%'
+            - '%gp_webpack.json_manifest_file_path%'
+            - '%kernel.environment%'
+            - '%gp_webpack.webpack_config_parameters%'
+
+    gp_webpack.webpack_config_manager:
+        class: GoldenPlanet\WebpackBundle\Config\WebpackConfigManager
+        public: false
+        arguments:
+            - '@gp_webpack.alias_manager'
+            - '@gp_webpack.asset_collector'
+            - '@gp_webpack.webpack_config_dumper'
+            - '@gp_webpack.asset_resolver'
+            - '@gp_webpack.asset_name_generator'
+            - '@gp_webpack.error_handler'
+
+    gp_webpack.twig_extension:
+        class: GoldenPlanet\WebpackBundle\Twig\WebpackExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+        arguments:
+            - '@gp_webpack.asset_manager'
+

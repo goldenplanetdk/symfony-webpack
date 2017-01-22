@@ -1,0 +1,9 @@
+framework:
+    secret: "secret"
+    templating:
+        engines: ['twig', 'php']
+    router:
+        resource: "@GoldenPlanetWebpackTestBundle/Resources/config/routing.xml"
+        strict_requirements: ~
+    profiler: ~
+    translator: ~

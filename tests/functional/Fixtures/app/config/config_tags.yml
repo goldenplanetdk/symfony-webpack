@@ -1,0 +1,6 @@
+imports: [{resource: 'common.yml'}]
+
+golden_planet_webpack:
+    config:
+        parameters:
+            extract_css: true

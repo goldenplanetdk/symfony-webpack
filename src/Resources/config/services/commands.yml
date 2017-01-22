@@ -1,0 +1,16 @@
+services:
+
+    gp_webpack.command.compile:
+        class: GoldenPlanet\WebpackBundle\Command\CompileCommand
+        tags:
+            - { name: console.command }
+        arguments: 
+            - '@gp_webpack.webpack_compiler'
+            - '@logger'
+
+    gp_webpack.command.dev_server:
+        class: GoldenPlanet\WebpackBundle\Command\DevServerCommand
+        tags:
+            - { name: console.command }
+        arguments: 
+            - '@gp_webpack.webpack_compiler'

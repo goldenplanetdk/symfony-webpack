@@ -1,0 +1,14 @@
+.idea/
+
+vendor/
+composer.phar
+composer.lock
+
+tests/_output/
+tests/_support/_generated/
+
+tests/functional/Fixtures/app/cache/
+tests/functional/Fixtures/app/config/webpack.config.js
+tests/functional/Fixtures/node_modules/
+tests/functional/Fixtures/web/
+tests/functional/Fixtures/package.json
