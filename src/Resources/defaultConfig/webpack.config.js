@@ -11,13 +11,14 @@ var DashboardPlugin = require('webpack-dashboard/plugin');
 module.exports = function makeWebpackConfig(options) {
 	/**
 	 * Environment type
-	 * BUILD is for generating minified builds
+	 * IS_PRODUCTION is for generating minified builds
 	 */
-	var BUILD = options.environment === 'prod';
+	var IS_PRODUCTION = options.environment === 'prod';
 	/**
-	 * Whether we are running in dev-server mode (versus simple compile)
+	 * Whether we are running in dev-server/watch mode (versus simple compile)
 	 */
-	var DEV_SERVER = process.env.WEBPACK_MODE === 'watch';
+	var IS_DEV_SERVER = process.env.WEBPACK_MODE === 'server';
+	var IS_WATCH = !!~['server', 'watch'].indexOf(process.env.WEBPACK_MODE);
 
 	/**
 	 * Config
@@ -35,14 +36,14 @@ module.exports = function makeWebpackConfig(options) {
 	};
 
 	var publicPath;
-	if (options.parameters.dev_server_public_path && DEV_SERVER) {
+	if (options.parameters.dev_server_public_path && IS_DEV_SERVER) {
 		publicPath = options.parameters.dev_server_public_path;
 
 		// this is for both modes to maintain backwards compatibility
 	} else if (options.parameters.public_path) {
 		publicPath = options.parameters.public_path;
 	} else {
-		publicPath = DEV_SERVER ? 'http://localhost:8080/compiled/' : '/compiled/';
+		publicPath = IS_DEV_SERVER ? 'http://localhost:8080/compiled/' : '/compiled/';
 	}
 
 	config.output = {
@@ -54,11 +55,11 @@ module.exports = function makeWebpackConfig(options) {
 
 		// Filename for entry points
 		// Only adds hash in build mode
-		filename: BUILD ? '[name].[chunkhash].js' : '[name].bundle.js',
+		filename: IS_PRODUCTION ? '[name].[chunkhash].js' : '[name].bundle.js',
 
 		// Filename for non-entry points
 		// Only adds hash in build mode
-		chunkFilename: BUILD ? '[name].[chunkhash].js' : '[name].bundle.js'
+		chunkFilename: IS_PRODUCTION ? '[name].[chunkhash].js' : '[name].bundle.js'
 	};
 
 	/**
@@ -66,7 +67,7 @@ module.exports = function makeWebpackConfig(options) {
 	 * Reference: http://webpack.github.io/docs/configuration.html#devtool
 	 * Type of sourcemap to use per build type
 	 */
-	if (BUILD) {
+	if (IS_PRODUCTION) {
 		config.devtool = 'source-map';
 	} else {
 		config.devtool = 'eval';
@@ -170,7 +171,7 @@ module.exports = function makeWebpackConfig(options) {
 	 */
 	config.plugins = [
 		new ExtractTextPlugin(
-			BUILD ? '[name].[hash].css' : '[name].bundle.css',
+			IS_PRODUCTION ? '[name].[hash].css' : '[name].bundle.css',
 			{
 				disable: !options.parameters.extract_css
 			}
@@ -189,12 +190,12 @@ module.exports = function makeWebpackConfig(options) {
 			optimizationLevel: 7
 		};
 
-	if (process.env.WEBPACK_MODE === 'watch' && process.env.TTY_MODE === 'on') {
+	if (IS_WATCH && process.env.TTY_MODE === 'on') {
 		config.plugins.push(new DashboardPlugin());
 	}
 
 	// Add build specific plugins
-	if (BUILD) {
+	if (IS_PRODUCTION) {
 		config.plugins.push(
 			// Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
 			// Only emit files when there are no errors

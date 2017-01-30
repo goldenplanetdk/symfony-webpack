@@ -118,7 +118,7 @@ class WebpackCompiler {
 		$prefix = DIRECTORY_SEPARATOR === '\\' ? [] : ['exec'];
 		$ttyPrefix = array_merge($prefix, $this->devServerTtyPrefix);
 		$process = $this->buildProcess($processBuilder, $prefix, $ttyPrefix);
-		$this->addEnvironment($process, 'WEBPACK_MODE=watch');
+		$this->addEnvironment($process, 'WEBPACK_MODE=' . ($isDevServer ? 'server' : 'watch'));
 
 		// remove manifest file if exists - keep sure we create new one
 		if (file_exists($this->manifestPath)) {
