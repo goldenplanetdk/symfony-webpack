@@ -8,6 +8,13 @@ services:
             - '@gp_webpack.webpack_compiler'
             - '@logger'
 
+    gp_webpack.command.watch:
+        class: GoldenPlanet\WebpackBundle\Command\WatchCommand
+        tags:
+            - { name: console.command }
+        arguments:
+            - '@gp_webpack.webpack_compiler'
+
     gp_webpack.command.dev_server:
         class: GoldenPlanet\WebpackBundle\Command\DevServerCommand
         tags:
