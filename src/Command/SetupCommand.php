@@ -9,31 +9,35 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Process\Process;
 
+/**
+ * Copies default package.json and symfony.webpack.config.js
+ * and optionally installs node_modules
+ */
 class SetupCommand extends Command {
 
-	protected $pathToPackage;
-	protected $pathToWebpackConfig;
+	protected $pathPackageJson;
+	protected $pathWebpackConfig;
 	protected $rootPath;
 	protected $configPath;
 
 	/**
 	 * SetupCommand constructor.
 	 *
-	 * @param null|string $pathToPackage
-	 * @param             $pathToWebpackConfig
-	 * @param             $rootPath
-	 * @param             $configPath
+	 * @param string $pathPackageJson
+	 * @param string $pathWebpackConfig
+	 * @param string $rootPath
+	 * @param string $configPath
 	 */
 	public function __construct(
-		$pathToPackage,
-		$pathToWebpackConfig,
+		$pathPackageJson,
+		$pathWebpackConfig,
 		$rootPath,
 		$configPath
 	) {
 		parent::__construct('webpack:setup');
 
-		$this->pathToPackage = $pathToPackage;
-		$this->pathToWebpackConfig = $pathToWebpackConfig;
+		$this->pathPackageJson = $pathPackageJson;
+		$this->pathWebpackConfig = $pathWebpackConfig;
 		$this->rootPath = realpath($rootPath);
 		$this->configPath = realpath($configPath);
 	}
@@ -46,63 +50,80 @@ class SetupCommand extends Command {
 			->setName('webpack:setup')
 			->setDescription('Initial setup for gp webpack bundle')
 			->setHelp(<<<EOT
-The <info>%command.name%</info> command copies a default <info>webpack.config.js</info> and <info>package.json</info> files and runs <info>npm install</info>. 
+The <info>%command.name%</info> command copies a default <info>symfony.webpack.config.js</info> and <info>package.json</info> files and runs <info>npm install</info>. 
 
 After executing this command, you should commit the following files to your repository.
 
-    <info>git add package.json app/config/webpack.config.js</info>
+    <info>git add package.json app/config/symfony.webpack.config.js</info>
 EOT
-			)
-		;
+			);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 
 		/** @var QuestionHelper $helper */
 		$helper = $this->getHelper('question');
 
-		$target = $this->rootPath . '/' . basename($this->pathToPackage);
+		/**
+		 * Copy package.json
+		 */
+		$fileTargetPackageJson = $this->rootPath . '/' . basename($this->pathPackageJson);
+		$shouldCopyPackageJson = true;
 
-		$question = new ConfirmationQuestion(sprintf(
-			'<question>File in %s already exists. Replace?</question> [yN] ',
-			$target
-		), false);
+		if (file_exists($fileTargetPackageJson)) {
 
-		if (
-			!file_exists($target)
-			|| $helper->ask($input, $output, $question)
-		) {
-			copy($this->pathToPackage, $target);
-			$output->writeln(sprintf('Dumped default package to <info>%s</info>', $target));
+			$question = new ConfirmationQuestion(sprintf(
+				'<question>File in %s already exists. Replace?</question> [yN] ',
+				$fileTargetPackageJson
+			), false);
+
+			$shouldCopyPackageJson = $helper->ask($input, $output, $question);
+		}
+
+		if ($shouldCopyPackageJson) {
+
+			copy($this->pathPackageJson, $fileTargetPackageJson);
+			$output->writeln(sprintf('Dumped default package to <info>%s</info>', $fileTargetPackageJson));
+
 		} else {
+
 			$output->writeln(sprintf(
 				'Please update <info>%s</info> by example in <info>%s</info> manually',
-				$target,
-				$this->pathToPackage
+				$fileTargetPackageJson,
+				$this->pathPackageJson
 			));
 		}
 
-		$target = $this->configPath . '/' . basename($this->pathToWebpackConfig);
+		/**
+		 * Copy symfony.webpack.config.js
+		 */
+		$fileTargetWebpackConfig = $this->configPath . '/' . basename($this->pathWebpackConfig);
 
 		$question = new ConfirmationQuestion(sprintf(
 			'<question>File in %s already exists. Replace?</question> [yN] ',
-			$target
+			$fileTargetWebpackConfig
 		), false);
 
 		if (
-			!file_exists($target)
+			!file_exists($fileTargetWebpackConfig)
 			|| $helper->ask($input, $output, $question)
 		) {
-			copy($this->pathToWebpackConfig, $target);
-			$output->writeln(sprintf('Dumped default webpack config to <info>%s</info>', $target));
+			copy($this->pathWebpackConfig, $fileTargetWebpackConfig);
+			$output->writeln(sprintf('Dumped default webpack config to <info>%s</info>', $fileTargetWebpackConfig));
 		} else {
 			$output->writeln(sprintf(
 				'Please update <info>%s</info> by example in <info>%s</info> manually',
-				$target,
-				$this->pathToWebpackConfig
+				$fileTargetWebpackConfig,
+				$this->pathWebpackConfig
 			));
 		}
 
+		/**
+		 * Install node_modules
+		 */
 		$process = new Process('npm install', $this->rootPath);
 
 		$question = new ConfirmationQuestion(
@@ -111,10 +132,12 @@ EOT
 		);
 
 		if ($helper->ask($input, $output, $question)) {
+
 			$process->setTimeout(600);
 			$process->run(function ($type, $buffer) use ($output) {
 				$output->write($buffer);
 			});
+
 		} else {
 			$output->writeln('Please update dependencies manually before compiling webpack assets');
 		}

@@ -1,4 +1,5 @@
 parameters:
+
     gp_webpack.aliases.register_bundles: ''
     gp_webpack.aliases.path_in_bundle: ''
     gp_webpack.aliases.additional: ''
@@ -18,8 +19,3 @@ parameters:
 
     gp_webpack.working_dir: ''
     gp_webpack.cache_dir: ''
-
-    # Not configurable from config.yml
-    gp_webpack.webpack_entry_config_path: '%gp_webpack.cache_dir%/webpack.config.js'
-    gp_webpack.manifest_file_path:        '%gp_webpack.cache_dir%/webpack_manifest.php'
-    gp_webpack.json_manifest_file_path:   '%gp_webpack.cache_dir%/webpack_manifest.json'

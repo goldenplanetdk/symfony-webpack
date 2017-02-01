@@ -40,13 +40,19 @@ class WebpackConfigManager {
 	 * @return WebpackConfig
 	 */
 	public function dump(WebpackConfig $previousConfig = null) {
+
 		$aliases = $this->aliasManager->getAliases();
+
 		$assetResult = $this->assetCollector->getAssets(
 			$previousConfig !== null ? $previousConfig->getCacheContext() : null
 		);
+
 		$entryPoints = [];
+
 		foreach ($assetResult->getAssets() as $asset) {
+
 			$assetName = $this->assetNameGenerator->generateName($asset);
+
 			try {
 				$entryPoints[$assetName] = $this->assetResolver->resolveAsset($asset);
 			} catch (AssetNotFoundException $exception) {

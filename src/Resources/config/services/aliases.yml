@@ -1,0 +1,10 @@
+services:
+
+    gp_webpack.alias_manager:
+        class: GoldenPlanet\WebpackBundle\Service\AliasManager
+        public: false
+        arguments:
+            - '@file_locator'
+            - '%gp_webpack.aliases.register_bundles%'
+            - '%gp_webpack.aliases.path_in_bundle%'
+            - '%gp_webpack.aliases.additional%'

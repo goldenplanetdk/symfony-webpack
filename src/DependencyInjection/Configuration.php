@@ -123,7 +123,7 @@ class Configuration implements ConfigurationInterface {
 				->children()
 
                     ->scalarNode('path')
-				    	->defaultValue('%kernel.root_dir%/config/webpack.config.js')
+				    	->defaultValue('%kernel.root_dir%/config/symfony.webpack.config.js')
                     ->end()
 
                     ->arrayNode('parameters')

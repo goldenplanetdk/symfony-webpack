@@ -20,32 +20,34 @@ class AssetResolverTest extends Test {
 	 *
 	 * @dataProvider resolveAssetProvider
 	 */
-	public function testResolveAsset($expected, $asset, $expectedAssetPath, $locatedPath, $entryFile) {
+	public function testResolveAsset(
+		$expected,
+		$asset,
+		$expectedAssetPath,
+		$locatedPath,
+		$entryFile
+	) {
 		/** @var MockObject|AssetLocator $assetLocator */
 		$assetLocator = $this->getMockBuilder('GoldenPlanet\WebpackBundle\Service\AssetLocator')
 			->disableOriginalConstructor()
-			->getMock()
-		;
+			->getMock();
 
 		$assetLocator
 			->expects($this->once())
 			->method('locateAsset')
 			->with($expectedAssetPath)
-			->willReturn($locatedPath)
-		;
+			->willReturn($locatedPath);
 
 		/** @var MockObject|EntryFileManager $entryFileManager */
 		$entryFileManager = $this->getMockBuilder('GoldenPlanet\WebpackBundle\Service\EntryFileManager')
 			->disableOriginalConstructor()
-			->getMock()
-		;
+			->getMock();
 
 		$entryFileManager
 			->expects($this->once())
 			->method('isEntryFile')
 			->with($locatedPath)
-			->willReturn($entryFile)
-		;
+			->willReturn($entryFile);
 
 		$assetResolver = new AssetResolver($assetLocator, $entryFileManager);
 
@@ -53,6 +55,7 @@ class AssetResolverTest extends Test {
 	}
 
 	public function resolveAssetProvider() {
+
 		return [ // @formatter:off
             [
                 /* expected            */  '/full/path.js',

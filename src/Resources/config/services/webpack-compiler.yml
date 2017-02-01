@@ -1,0 +1,18 @@
+services:
+
+    gp_webpack.webpack_compiler:
+        class: GoldenPlanet\WebpackBundle\Compiler\WebpackCompiler
+        public: false
+        arguments:
+            - '@gp_webpack.webpack_config_manager'
+            - '%gp_webpack.json_manifest_file_path%'
+            - '@gp_webpack.manifest_storage'
+            - '%gp_webpack.working_dir%'
+            - '@logger'
+            - '%gp_webpack.bin.webpack.executable%'
+            - '%gp_webpack.bin.webpack.tty_prefix%'
+            - '%gp_webpack.bin.webpack.arguments%'
+            - '%gp_webpack.bin.dev_server.executable%'
+            - '%gp_webpack.bin.dev_server.tty_prefix%'
+            - '%gp_webpack.bin.dev_server.arguments%'
+            - '%gp_webpack.bin.disable_tty%'

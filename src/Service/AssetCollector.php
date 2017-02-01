@@ -10,7 +10,16 @@ class AssetCollector {
 	private $assetProvider;
 	private $config;
 
-	public function __construct(AssetProviderInterface $assetProvider, array $config) {
+	/**
+	 * AssetCollector constructor.
+	 *
+	 * @param AssetProviderInterface $assetProvider
+	 * @param array                  $config
+	 */
+	public function __construct(
+		AssetProviderInterface $assetProvider,
+		array $config
+	) {
 		$this->assetProvider = $assetProvider;
 		$this->config = $config;
 	}

@@ -20,20 +20,23 @@ class AssetLocatorTest extends Test {
 	 *
 	 * @dataProvider locateAssetProvider
 	 */
-	public function testLocateAsset($expected, $asset, $expectedAlias = null, $aliasPath = null) {
+	public function testLocateAsset(
+		$expected,
+		$asset,
+		$expectedAlias = null,
+		$aliasPath = null
+	) {
 		/** @var MockObject|AliasManager $aliasManager */
 		$aliasManager = $this->getMockBuilder('GoldenPlanet\WebpackBundle\Service\AliasManager')
 			->disableOriginalConstructor()
-			->getMock()
-		;
+			->getMock();
 
 		if ($expectedAlias !== null) {
 
 			$expectation = $aliasManager
 				->expects($this->once())
 				->method('getAliasPath')
-				->with($expectedAlias)
-			;
+				->with($expectedAlias);
 
 			if ($aliasPath instanceof Exception) {
 				$expectation->willThrowException($aliasPath);
@@ -44,8 +47,7 @@ class AssetLocatorTest extends Test {
 		} else {
 			$aliasManager
 				->expects($this->never())
-				->method('getAliasPath')
-			;
+				->method('getAliasPath');
 		}
 
 		$assetLocator = new AssetLocator($aliasManager);
@@ -59,6 +61,7 @@ class AssetLocatorTest extends Test {
 	}
 
 	public function locateAssetProvider() {
+
 		$dir = realpath(__DIR__ . '/../Fixtures');
 
 		return [ // @formatter:off

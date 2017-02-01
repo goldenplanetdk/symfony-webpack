@@ -1,6 +1,3 @@
-imports:
-    - { resource: 'parameters.yml' }
-
 services:
 
     gp_webpack.asset_provider.array_collection_resource:

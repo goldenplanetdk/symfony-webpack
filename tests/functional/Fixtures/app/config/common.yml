@@ -3,7 +3,7 @@ framework:
     templating:
         engines: ['twig', 'php']
     router:
-        resource: "@GoldenPlanetWebpackTestBundle/Resources/config/routing.xml"
+        resource: "@GoldenPlanetWebpackTestBundle/Resources/config/routing.yml"
         strict_requirements: ~
     profiler: ~
     translator: ~

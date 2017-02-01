@@ -21,3 +21,13 @@ services:
             - { name: console.command }
         arguments: 
             - '@gp_webpack.webpack_compiler'
+
+    gp_webpack.command.setup:
+        class: GoldenPlanet\WebpackBundle\Command\SetupCommand
+        tags:
+            - { name: console.command }
+        arguments:
+            - '@gp_webpack.file_path.package_json'
+            - '@gp_webpack.file_path.webpack_config_js'
+            - '%kernel.root_dir%/..'
+            - '%kernel.root_dir%/config'

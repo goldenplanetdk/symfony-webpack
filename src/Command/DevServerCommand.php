@@ -8,6 +8,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+/**
+ * Runs webpack-dev-server
+ */
 class DevServerCommand extends Command {
 
 	private $compiler;
@@ -41,6 +44,9 @@ EOT
 		;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 
 		$this->compiler->compileAndWatch(

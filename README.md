@@ -9,7 +9,7 @@
 
 [Usage](#usage)
 
-[Run](#running-webpack)
+[Run](#compile)
 
 [Documentation](https://github.com/goldenplanetdk/symfony-webpack/wiki)
 
@@ -22,7 +22,7 @@ Installation
 composer require goldenplanetdk/symfony-webpack
 ```
 
-Add to your `AppKernel` `registerBundles()` bundles array:
+Add this bundle to your array of instantiated bundles in `AppKernel` `registerBundles()`:
 
 ```php
 new GoldenPlanet\WebpackBundle\GoldenPlanetWebpackBundle(),

@@ -9,6 +9,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+/**
+ * Runs webpack with specific arguments
+ */
 class CompileCommand extends Command {
 
 	private $compiler;
@@ -50,6 +53,9 @@ EOT
 		;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 
 		$logger = $this->logger;

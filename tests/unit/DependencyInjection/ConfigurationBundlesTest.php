@@ -6,7 +6,7 @@ use Codeception\TestCase\Test;
 use GoldenPlanet\WebpackBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationTest extends Test {
+class ConfigurationBundlesTest extends Test {
 
 	/**
 	 * Test resulting bundles list
@@ -18,6 +18,7 @@ class ConfigurationTest extends Test {
 	 * @dataProvider bundlesResourceDataProvider
 	 */
 	public function testBundlesResource($expected, $config) {
+
 		$bundles = [
 			'MyFirstBundle',
 			'MySecondBundle',
@@ -48,7 +49,7 @@ class ConfigurationTest extends Test {
 	public function bundlesResourceDataProvider() {
 		return [
 			'`asset_providers` not specified: all bundles should be added'                => [
-				// expected
+				// expected bundles list
 				[
 					'MyFirstBundle',
 					'MySecondBundle',
@@ -57,7 +58,7 @@ class ConfigurationTest extends Test {
 				[],
 			],
 			'`twig_bundles` is null: all bundles should be added'                         => [
-				// expected
+				// expected bundles list
 				[
 					'MyFirstBundle',
 					'MySecondBundle',
@@ -73,7 +74,7 @@ class ConfigurationTest extends Test {
 				],
 			],
 			'`twig_bundles` is empty: all bundles should be added'                        => [
-				// expected
+				// expected bundles list
 				[
 					'MyFirstBundle',
 					'MySecondBundle',
@@ -89,7 +90,7 @@ class ConfigurationTest extends Test {
 				],
 			],
 			'`twig_bundles` are specified: default list of bundles should be overwritten' => [
-				// expected
+				// expected bundles list
 				['MyFirstBundle'],
 				// config.yml
 				[
@@ -102,7 +103,7 @@ class ConfigurationTest extends Test {
 				],
 			],
 			'`twig_directory` is specified: list of bundles should be removed when'       => [
-				// expected
+				// expected bundles list
 				null,
 				// config.yml
 				[

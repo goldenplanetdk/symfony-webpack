@@ -1,0 +1,9 @@
+services:
+
+    gp_webpack.twig_extension:
+        class: GoldenPlanet\WebpackBundle\Twig\WebpackExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+        arguments:
+            - '@gp_webpack.asset_manager'

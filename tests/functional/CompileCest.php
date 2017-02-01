@@ -18,10 +18,12 @@ class CompileCest {
 	}
 
 	public function getNoErrorIfAssetsAreDumped(FunctionalTester $I) {
+
 		$I->bootKernelWith();
+
 		$I->runCommand('gp_webpack.command.setup');
 		$I->seeFileFound(__DIR__ . '/Fixtures/package.json');
-		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/webpack.config.js');
+		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/symfony.webpack.config.js');
 
 		$I->runCommand('gp_webpack.command.compile');
 		$I->seeCommandStatusCode(0);

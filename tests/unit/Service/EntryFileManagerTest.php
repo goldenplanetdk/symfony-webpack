@@ -16,13 +16,20 @@ class EntryFileManagerTest extends Test {
 	 *
 	 * @dataProvider dataProvider
 	 */
-	public function testGetEntryFileType($expected, $asset, $enabledExtensions, $disabledExtensions, $typeMap) {
+	public function testGetEntryFileType(
+		$expected,
+		$asset,
+		$enabledExtensions,
+		$disabledExtensions,
+		$typeMap
+	) {
 		$entryFileManager = new EntryFileManager($enabledExtensions, $disabledExtensions, $typeMap);
 
 		$this->assertSame($expected, $entryFileManager->getEntryFileType($asset));
 	}
 
 	public function dataProvider() {
+
 		return [ // @formatter:off
             'parses simple extension' => [
                 /* expected            */  'css',

@@ -41,8 +41,10 @@ class AssetManager {
 	 * @api
 	 */
 	public function getAssetUrl($asset, $type = null) {
+
 		$manifest = $this->getManifest();
 		$assetName = $this->assetNameGenerator->generateName($asset);
+
 		if (!isset($manifest[$assetName])) {
 			throw new RuntimeException(sprintf(
 				'No information in manifest for %s (key %s). %s',
@@ -53,9 +55,12 @@ class AssetManager {
 		}
 
 		if ($type === null) {
+
 			$entryFileType = $this->entryFileManager->getEntryFileType($asset);
 			$type = $entryFileType !== null ? $entryFileType : self::TYPE_JS;
+
 			if (!isset($manifest[$assetName][$type])) {
+
 				throw new RuntimeException(sprintf(
 					'No information in the manifest for type %s (key %s, asset %s). %s',
 					$type,

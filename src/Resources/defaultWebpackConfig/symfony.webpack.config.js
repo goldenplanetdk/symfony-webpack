@@ -8,12 +8,12 @@ var AssetsPlugin = require('assets-webpack-plugin');
 var ExtractFilePlugin = require('extract-file-loader/Plugin');
 var DashboardPlugin = require('webpack-dashboard/plugin');
 
-module.exports = function makeWebpackConfig(options) {
+module.exports = function makeWebpackConfig(symfonyOptions) {
 	/**
 	 * Environment type
 	 * IS_PRODUCTION is for generating minified builds
 	 */
-	var IS_PRODUCTION = options.environment === 'prod';
+	var IS_PRODUCTION = symfonyOptions.environment === 'prod';
 	/**
 	 * Whether we are running in dev-server/watch mode (versus simple compile)
 	 */
@@ -27,28 +27,28 @@ module.exports = function makeWebpackConfig(options) {
 	 */
 	var config = {};
 
-	config.entry = options.entry;
+	config.entry = symfonyOptions.entry;
 
 	config.resolve = {
-		alias: options.alias,
+		alias: symfonyOptions.alias,
 		extensions: ['', '.js', '.jsx'],
 		modulesDirectories: ['node_modules', '']
 	};
 
 	var publicPath;
-	if (options.parameters.dev_server_public_path && IS_DEV_SERVER) {
-		publicPath = options.parameters.dev_server_public_path;
+	if (symfonyOptions.parameters.dev_server_public_path && IS_DEV_SERVER) {
+		publicPath = symfonyOptions.parameters.dev_server_public_path;
 
 		// this is for both modes to maintain backwards compatibility
-	} else if (options.parameters.public_path) {
-		publicPath = options.parameters.public_path;
+	} else if (symfonyOptions.parameters.public_path) {
+		publicPath = symfonyOptions.parameters.public_path;
 	} else {
 		publicPath = IS_DEV_SERVER ? 'http://localhost:8080/compiled/' : '/compiled/';
 	}
 
 	config.output = {
 		// Absolute output directory
-		path: options.parameters.path ? options.parameters.path : __dirname + '/../../web/compiled/',
+		path: symfonyOptions.parameters.path ? symfonyOptions.parameters.path : __dirname + '/../../web/compiled/',
 
 		// Output path from the view of the page
 		publicPath: publicPath,
@@ -173,19 +173,19 @@ module.exports = function makeWebpackConfig(options) {
 		new ExtractTextPlugin(
 			IS_PRODUCTION ? '[name].[hash].css' : '[name].bundle.css',
 			{
-				disable: !options.parameters.extract_css
+				disable: !symfonyOptions.parameters.extract_css
 			}
 		)
 	];
 
-	var manifestPathParts = options.manifest_path.split('/');
+	var manifestPathParts = symfonyOptions.manifest_path.split('/');
 	config.plugins.push(new AssetsPlugin({filename: manifestPathParts.pop(), path: manifestPathParts.join('/')}));
 
 	// needed to use binary files (like images) as entry-points
 	// puts file-loader emitted files into manifest
 	config.plugins.push(new ExtractFilePlugin());
 
-	config.imageWebpackLoader = options.parameters.image_loader_options || {
+	config.imageWebpackLoader = symfonyOptions.parameters.image_loader_options || {
 			progressive: true,
 			optimizationLevel: 7
 		};

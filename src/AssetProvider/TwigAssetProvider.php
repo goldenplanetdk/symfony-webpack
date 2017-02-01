@@ -83,13 +83,19 @@ class TwigAssetProvider implements AssetProviderInterface {
 		$functionName = WebpackExtension::FUNCTION_NAME;
 
 		if ($node instanceof ExpressionFunction) {
+
 			$name = $node->getAttribute('name');
+
 			if ($name === $functionName) {
+
 				$arguments = iterator_to_array($node->getNode('arguments'));
+
 				if (!is_array($arguments)) {
 					throw new ResourceParsingException('arguments is not an array');
 				}
+
 				if (count($arguments) !== 1 && count($arguments) !== 2) {
+
 					throw new ResourceParsingException(sprintf(
 						'Expected exactly one or two arguments passed to function %s in %s at line %s',
 						$functionName,
@@ -97,7 +103,9 @@ class TwigAssetProvider implements AssetProviderInterface {
 						$node->getTemplateLine()
 					));
 				}
+
 				if (!$arguments[0] instanceof ConstantFunction) {
+
 					throw new ResourceParsingException(sprintf(
 						'Argument passed to function %s must be text node to parse without context. File %s, line %s',
 						$functionName,
@@ -105,13 +113,17 @@ class TwigAssetProvider implements AssetProviderInterface {
 						$node->getTemplateLine()
 					));
 				}
+
 				$assets[] = $arguments[0]->getAttribute('value');
+
 				return $assets;
 			}
 		}
 
 		foreach ($node as $child) {
+
 			if ($child instanceof Node) {
+
 				$assets = array_merge($assets, $this->loadNode($child, $resource));
 			}
 		}
