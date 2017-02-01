@@ -16,6 +16,6 @@ class AssetNameGenerator {
 	 * @return string
 	 */
 	public function generateName($asset) {
-		return sprintf('%s-%s', pathinfo($asset, PATHINFO_FILENAME), sha1($asset));
+		return sprintf('%s.%s', pathinfo($asset, PATHINFO_FILENAME), hash('crc32b', $asset));
 	}
 }
