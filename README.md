@@ -41,7 +41,7 @@ Usually you will want to write your own webpack config. The one that is created 
 Usage
 ===
 
-Requiring scripts and stylesheets in `twig`
+Including scripts and stylesheets in `twig`
 ----
 
 Single entry point:
@@ -82,7 +82,51 @@ To avoid having a `link` element with an empty `href` in the DOM when the script
 {% endif %}
 ```
 
-Requiring other resource types in `twig`
+Including reference to a **named** commons chunk in `twig`
+---
+
+In webpack configuration it is allowed to put commonly used libraries (shared dependencies) in a separate file, while still having reference to the same singleton library when using `require`. For example, to put `jquery` and `lodash` to a separate file (a commons chunk) add following to your `symfony.webpack.config.js`:
+
+```js
+module.exports = function makeWebpackConfig(symfonyOptions) {
+
+	config.entry = symfonyOptions.entry;
+	config.entry['jquery-and-lodash'] = ['jquery', 'lodash'];
+	
+	// ...
+		
+	config.plugins.push(
+		new webpack.optimize.CommonsChunkPlugin({
+			names: [
+				'jquery-and-lodash', // match entry point(s) name
+			],
+		}),		
+	)
+}
+```
+
+Then add the script that will load the common libs before any other script that may depend on it. Use the `webpack_entry` function to inject the actual compiled asset path:
+
+```twig
+<script defer src="{{ webpack_entry('jquery-and-lodash') }}"><script>
+```
+
+Commons chunk may contain other type of assets:
+
+```twig
+<link rel="stylesheet" href="{{ webpack_entry('shared', 'css') }}">
+```
+
+The rendered output of above in production mode will be something like:
+
+```html
+<script src="/compiled/jquery-and-lodash.64ff80bf.c95f999344d5b2777843.js"></script>
+<link rel="stylesheet" href="/compiled/shared.0a8efeb2b0832928e773.css">
+```
+
+Webpack can also be configured to determine the commonly used libraries in multiple entry points automatically. Support for these is planned. 
+
+Including other resource types in `twig`
 ---
 
 You can pass any kind of resources to webpack with `webpack_asset` function for single entry point:

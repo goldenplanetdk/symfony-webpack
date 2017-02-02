@@ -32,18 +32,23 @@ class AssetManager {
 	 *      type is not provided and cannot be guessed
 	 *
 	 * @param string      $asset
-	 * @param string|null $type specifies type in manifest, usually "js" or "css"
+	 * @param string|null $type        specifies type in manifest, usually "js" or "css"
+	 * @param bool        $isEntryName use custom entry point name, that is manually specified
+	 *                                 in webpack config (e.g. name of a commons chunk)
 	 *
-	 * @return string|null        null is returned if type is provided and missing in manifest
-	 *
-	 * @throws RuntimeException
+	 * @return null|string null is returned if type is provided and missing in manifest
 	 *
 	 * @api
 	 */
-	public function getAssetUrl($asset, $type = null) {
+	public function getAssetUrl($asset, $type = null, $isEntryName = false) {
 
 		$manifest = $this->getManifest();
-		$assetName = $this->assetNameGenerator->generateName($asset);
+
+		if ($isEntryName) {
+			$assetName = $asset;
+		} else {
+			$assetName = $this->assetNameGenerator->generateName($asset);
+		}
 
 		if (!isset($manifest[$assetName])) {
 			throw new RuntimeException(sprintf(

@@ -80,7 +80,7 @@ class TwigAssetProvider implements AssetProviderInterface {
 	private function loadNode(Node $node, $resource) {
 
 		$assets = [];
-		$functionName = WebpackExtension::FUNCTION_NAME;
+		$functionName = WebpackExtension::FUNCTION_NAME_ASSET;
 
 		if ($node instanceof ExpressionFunction) {
 
