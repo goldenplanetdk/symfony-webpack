@@ -22,33 +22,31 @@ Installation
 composer require goldenplanetdk/symfony-webpack
 ```
 
-Add this bundle to your array of instantiated bundles in `AppKernel` `registerBundles()`:
+Add to `AppKernel`:
 
 ```php
 new GoldenPlanet\WebpackBundle\GoldenPlanetWebpackBundle(),
 ```
 
-Generate a basic `symfony-webpack.config.js`:
+Generate `symfony-webpack.config.js` and install dependencies:
 
 ```
 app/console webpack:setup
 ```
-
-Usually you will want to write your own webpack config. The one that is created with this command is mainly used for testing purposes of this repository.
 
 <br>
 
 Usage
 ===
 
-Including scripts and stylesheets in `twig`
+Scripts and Stylesheets
 ----
 
-Single entry point:
+Single entry point (`.js`, `.ts`, `.coffee` etc.) in `twig` templates:
 
 ```twig
 <link rel="stylesheet" href="{{ webpack_asset('@acmeHello/script.js', 'css') }}">
-<script defer src="{{ webpack('@acmeHello/script.js') }}"></script>
+<script defer src="{{ webpack_asset('@acmeHello/script.js') }}"></script>
 ```
 
 *Note: here `@acmeHello` is equal to `@AcmeHelloBundle/Resources/assets`*
@@ -82,10 +80,10 @@ To avoid having a `link` element with an empty `href` in the DOM when the script
 {% endif %}
 ```
 
-Including reference to a **named** commons chunk in `twig`
+Named commons chunk
 ---
 
-In webpack configuration it is allowed to put commonly used libraries (shared dependencies) in a separate file, while still having reference to the same singleton library when using `require`. For example, to put `jquery` and `lodash` to a separate file (a commons chunk) add following to your `symfony.webpack.config.js`:
+In webpack configuration it is allowed to put commonly used libraries (shared dependencies) in a separate file, while still having reference to the same singleton library when using `require`. For example, to put `jquery` and `lodash` to a separate file (a commons chunk) add following to your `symfony-webpack.config.js`:
 
 ```js
 module.exports = function makeWebpackConfig(symfonyOptions) {
@@ -98,7 +96,7 @@ module.exports = function makeWebpackConfig(symfonyOptions) {
 	config.plugins.push(
 		new webpack.optimize.CommonsChunkPlugin({
 			names: [
-				'jquery-and-lodash', // match entry point(s) name
+				'jquery-and-lodash', // match entry point name(s)
 			],
 		}),		
 	)
@@ -126,7 +124,7 @@ The rendered output of above in production mode will be something like:
 
 Webpack can also be configured to determine the commonly used libraries in multiple entry points automatically. Support for these is planned. 
 
-Including other resource types in `twig`
+Other resource types
 ---
 
 You can pass any kind of resources to webpack with `webpack_asset` function for single entry point:
@@ -157,9 +155,10 @@ Requiring within scripts and stylesheets
 Inside `script.js`:
 
 ```js
-import {Person} from './models/person.ts';
+import URI from 'urijs';
+import {Person} from './models/person';
 
-require('./other-script.js');
+require('./other-script.ts');
 ```
 
 Inside `stylesheet.css`, `less`, `sass` or `stylus`:
@@ -196,7 +195,7 @@ Watch for changes, compile and automatically reload browser tab(s)
 app/console webpack:dev-server
 ```
 
-Compile as part of deployment into production environment:
+Compile as part of deployment in production environment:
 
 ```bash
 app/console webpack:compile --env=prod
