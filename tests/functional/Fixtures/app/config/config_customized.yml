@@ -1,24 +1,30 @@
 imports: [{resource: 'common.yml'}]
 
 golden_planet_webpack:
+
     asset_providers:
         -
             type: twig_directory
             resource: %kernel.root_dir%/Resources/views
+
     config:
+        path: %kernel.root_dir%/config/webpack.config.commons-chunk.js
         parameters:
-            extract_css: true
-            public_path: /assets/
+            extractCss: true
+            compiledDirName: assets
             path: %kernel.root_dir%/../web/assets/
+
     twig:
         suppress_errors: false
+
     aliases:
         register_bundles:
             - GoldenPlanetWebpackTestBundle
-        path_in_bundle: /Resources/additional-assets
+        bundle_default: /Resources/additional-assets
         additional:
             'a': %kernel.root_dir%/../src/WebpackTestBundle/Resources/assets
             'app': %kernel.root_dir%/Resources/assets
+
     bin:
         webpack:
             executable:

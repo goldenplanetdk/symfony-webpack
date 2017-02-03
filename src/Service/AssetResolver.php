@@ -24,9 +24,11 @@ class AssetResolver {
 	 * @throws AssetNotFoundException
 	 */
 	public function resolveAsset($asset) {
+
 		$assetParts = [];
 
 		$position = strrpos($asset, '!');
+
 		if ($position !== false) {
 			$loader = substr($asset, 0, $position);
 			$assetPath = substr($asset, $position + 1);

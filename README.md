@@ -47,18 +47,18 @@ Including scripts and stylesheets in `twig`
 Single entry point:
 
 ```twig
-<link rel="stylesheet" href="{{ webpack_asset('@acme_hello/script.js', 'css') }}">
-<script defer src="{{ webpack('@acme_hello/script.js') }}"></script>
+<link rel="stylesheet" href="{{ webpack_asset('@acmeHello/script.js', 'css') }}">
+<script defer src="{{ webpack('@acmeHello/script.js') }}"></script>
 ```
 
-*Note: here `@acme_hello` is equal to `@AcmeHelloBundle/Resources/assets`*
+*Note: here `@acmeHello` is equal to `@AcmeHelloBundle/Resources/assets`*
 
 Multiple entry points:
 
 ```twig
 {% webpack_javascripts
-	'@acme_hello/main.js'
-	'@acme_hello/another-entry-point.js'
+	'@acmeHello/main.js'
+	'@acmeHello/another-entry-point.js'
 %}
 	<script defer src="{{ asset_url }}"><script>
 {% end_webpack_javascripts %}
@@ -66,8 +66,8 @@ Multiple entry points:
 
 ```twig
 {% webpack_stylesheets
-	'@acme_hello/main.js'
-	'@acme_hello/another-entry-point.js'
+	'@acmeHello/main.js'
+	'@acmeHello/another-entry-point.js'
 %}
 	<link rel="stylesheet" href="{{ asset_url }}"><script>
 {% end_webpack_stylesheets %}
@@ -76,7 +76,7 @@ Multiple entry points:
 To avoid having a `link` element with an empty `href` in the DOM when the script may possibly not emit a stylesheet, test the value returned from `webpack_asset` before inserting the `link` element:
 
 ```twig
-{% set cssUrl = webpack_asset('@acme_hello/script.js', 'css') %}
+{% set cssUrl = webpack_asset('@acmeHello/script.js', 'css') %}
 {% if cssUrl %}
 	<link rel="stylesheet" href="{{ cssUrl }}">
 {% endif %}
@@ -168,19 +168,6 @@ Inside `stylesheet.css`, `less`, `sass` or `stylus`:
 body {
     background: url('~@AcmeBundle/Resources/images/bg.jpg');
 }
-```
-
-Requiring with custom aliases
-----
-
-Assuming that you've [configured an `images` alias](#aliases) in `config.yml`: 
-
-```twig
-<img src="{{ webpack_asset('@acme_images/lion.png') }}"/>
-```
-
-```css
-body{ background: url('~@acme_images/lion.png') }
 ```
 
 <br>

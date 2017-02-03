@@ -5,6 +5,9 @@ namespace GoldenPlanet\WebpackBundle\AssetProvider;
 use GoldenPlanet\WebpackBundle\AssetProvider\CollectionResource\CollectionResourceInterface;
 use GoldenPlanet\WebpackBundle\Exception\InvalidContextException;
 
+/**
+ * {@inheritDoc}
+ */
 class CollectionResourceAssetProvider implements AssetProviderInterface {
 
 	protected $collectionResource;

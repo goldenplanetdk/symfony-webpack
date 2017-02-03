@@ -43,23 +43,22 @@ class Configuration implements ConfigurationInterface {
 		$treeBuilder = new TreeBuilder();
 		$rootNode = $treeBuilder->root('gp_webpack');
 
-		/** @noinspection PhpUndefinedMethodInspection */
 		$rootNode->children()// @formatter:off
 
-            /**
-             * Root working and cache directories
-             */
-            ->scalarNode('working_dir')
-                ->defaultValue('%kernel.root_dir%/..')
-            ->end()
-            ->scalarNode('cache_dir')
-                ->defaultValue('%kernel.cache_dir%')
-            ->end()
+			/**
+			 * Working and cache directories
+			 */
+			->scalarNode('working_dir')
+				->defaultValue('%kernel.root_dir%/..')
+			->end()
+			->scalarNode('cache_dir')
+				->defaultValue('%kernel.cache_dir%')
+			->end()
 
-            /**
-             * Asset paths
-             */
-            ->arrayNode('asset_providers')
+			/**
+			 * Asset paths
+			 */
+			->arrayNode('asset_providers')
 				->defaultValue([
 					[
 						'type' => 'twig_bundles',
@@ -82,21 +81,21 @@ class Configuration implements ConfigurationInterface {
 
 						return $value;
 					})
-                ->end()
+				->end()
 				->prototype('array')
 					->children()
 						->scalarNode('type')->end()
 						->variableNode('resource')->end()
 					->end()
-                ->end()
-            ->end() // asset_providers
+				->end()
+			->end() // asset_providers
 
-            /**
-             * Twig error handling
-             */
-            ->arrayNode('twig')
-                ->addDefaultsIfNotSet()
-                ->children()
+			/**
+			 * Twig error handling
+			 */
+			->arrayNode('twig')
+				->addDefaultsIfNotSet()
+				->children()
 
 					->scalarNode('suppress_errors')
 						->defaultValue(
@@ -109,44 +108,44 @@ class Configuration implements ConfigurationInterface {
 								'ignore_unknowns',
 							])
 							->thenInvalid('suppress_errors must be either a boolean or "ignore_unknowns"')
-                        ->end()
+						->end()
 					->end()
 
-                ->end()
-            ->end() // twig
+				->end()
+			->end() // twig
 
-            /**
-             * Webpack config path and parameters
-             */
-            ->arrayNode('config')
+			/**
+			 * Webpack config path and parameters
+			 */
+			->arrayNode('config')
 				->addDefaultsIfNotSet()
 				->children()
 
-                    ->scalarNode('path')
-				    	->defaultValue('%kernel.root_dir%/config/symfony.webpack.config.js')
-                    ->end()
+					->scalarNode('path')
+						->defaultValue('%kernel.root_dir%/config/symfony.webpack.config.js')
+					->end()
 
-                    ->arrayNode('parameters')
+					->arrayNode('parameters')
 						->treatNullLike([])
 						->useAttributeAsKey('name')
 						->prototype('variable')->end()
-                    ->end()
+					->end()
 
-                ->end()
-            ->end() // config
+				->end()
+			->end() // config
 
-            /**
-             * Entry file
-             */
-            ->arrayNode('entry_file')
-                ->addDefaultsIfNotSet()
+			/**
+			 * Entry file
+			 */
+			->arrayNode('entry_file')
+				->addDefaultsIfNotSet()
 				->children()
 
 					->booleanNode('enabled')
 						->defaultTrue()
 					->end()
 
-                    ->arrayNode('disabled_extensions')
+					->arrayNode('disabled_extensions')
 						->defaultValue([
 							'js',
 							'jsx',
@@ -157,8 +156,8 @@ class Configuration implements ConfigurationInterface {
 							'ls',
 						])
 						->prototype('scalar')
-						    ->info('For these extensions default webpack functionality will be used')
-                        ->end()
+							->info('For these extensions default webpack functionality will be used')
+						->end()
 					->end()
 
 					->arrayNode('enabled_extensions')
@@ -168,7 +167,7 @@ class Configuration implements ConfigurationInterface {
 								'For these extensions file itself will be provided (not JS file). '
 								. 'Set to non-empty to override disabled extensions. Empty means all but disabled'
 							)
-                        ->end()
+						->end()
 					->end()
 
 					->arrayNode('type_map')
@@ -185,17 +184,17 @@ class Configuration implements ConfigurationInterface {
 								'What output file type to use for what input file types. Used only for entry files. '
 								. 'Defaults to same file type - needed only when preprocessors are used'
 							)
-                        ->end()
+						->end()
 					->end()
 
 				->end()
-            ->end() // entry_file
+			->end() // entry_file
 
-            /**
-             * Aliases
-             */
-            ->arrayNode('aliases')
-                ->addDefaultsIfNotSet()
+			/**
+			 * Aliases
+			 */
+			->arrayNode('aliases')
+				->addDefaultsIfNotSet()
 				->children()
 
 					->arrayNode('register_bundles')
@@ -209,7 +208,7 @@ class Configuration implements ConfigurationInterface {
 						->end()
 					->end()
 
-					->scalarNode('path_in_bundle')
+					->scalarNode('bundle_default')
 						->defaultValue('Resources/assets')
 					->end()
 
@@ -222,23 +221,23 @@ class Configuration implements ConfigurationInterface {
 				->end()
 			->end() // aliases
 
-            /**
-             * Webpack and webpack-dev-server executables
-             */
-            ->arrayNode('bin')
-                ->addDefaultsIfNotSet()
-                ->children()
+			/**
+			 * Webpack and webpack-dev-server executables
+			 */
+			->arrayNode('bin')
+				->addDefaultsIfNotSet()
+				->children()
 
-                    ->booleanNode('disable_tty')
-                        ->defaultValue($this->environment !== 'dev')
-                    ->end()
+					->booleanNode('disable_tty')
+						->defaultValue($this->environment !== 'dev')
+					->end()
 
 					/**
 					 * Webpack executable and arguments
 					 */
-                    ->arrayNode('webpack')
-                        ->addDefaultsIfNotSet()
-                        ->children()
+					->arrayNode('webpack')
+						->addDefaultsIfNotSet()
+						->children()
 							->arrayNode('executable')
 								->defaultValue([
 									'node',
@@ -254,22 +253,22 @@ class Configuration implements ConfigurationInterface {
 								->defaultValue([])
 								->prototype('scalar')->end()
 							->end()
-                        ->end()
-                    ->end()
+						->end()
+					->end()
 
 					/**
 					 * Webpack dev server executable and arguments
 					 */
-                    ->arrayNode('dev_server')
-                        ->addDefaultsIfNotSet()
-                        ->children()
-                            ->arrayNode('executable')
-                                ->defaultValue([
+					->arrayNode('dev_server')
+						->addDefaultsIfNotSet()
+						->children()
+							->arrayNode('executable')
+								->defaultValue([
 									'node',
 									'node_modules/webpack-dev-server/bin/webpack-dev-server.js',
 								])
 								->prototype('scalar')->end()
-                            ->end()
+							->end()
 							->arrayNode('tty_prefix')
 								->defaultValue([
 									'node',
@@ -277,20 +276,20 @@ class Configuration implements ConfigurationInterface {
 									'--',
 								])
 								->prototype('scalar')->end()
-                            ->end()
-                            ->arrayNode('arguments')
-                                ->defaultValue([
+							->end()
+							->arrayNode('arguments')
+								->defaultValue([
 									'--hot',
 									'--history-api-fallback',
 									'--inline',
 								])
-                                ->prototype('scalar')->end()
-                            ->end()
-                        ->end()
-                    ->end()
+								->prototype('scalar')->end()
+							->end()
+						->end()
+					->end()
 
-                ->end()
-            ->end() // bin
+				->end()
+			->end() // bin
         ;
 
         return $treeBuilder;

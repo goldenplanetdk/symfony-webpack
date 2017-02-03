@@ -5,10 +5,10 @@ services:
         public: false
         arguments:
             - '%gp_webpack.webpack_entry_config_path%'
-            - '%gp_webpack.webpack_config_path%'
+            - '%gp_webpack.config.path%'
             - '%gp_webpack.json_manifest_file_path%'
             - '%kernel.environment%'
-            - '%gp_webpack.webpack_config_parameters%'
+            - '%gp_webpack.config.parameters%'
 
     gp_webpack.webpack_config_manager:
         class: GoldenPlanet\WebpackBundle\Config\WebpackConfigManager

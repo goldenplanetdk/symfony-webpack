@@ -23,20 +23,37 @@ class Functional extends Symfony2 {
 		// do nothing
 	}
 
+	/**
+	 * Boot a Symfony application with specified config file
+	 *
+	 * @param string|null $configFile
+	 */
 	protected function bootKernel($configFile = null) {
+
 		if ($this->kernel) {
 			return;
 		}
+
 		$this->kernel = new \TestKernel(
 			$this->config['environment'] . ($configFile !== null ? $configFile : ''),
 			$this->config['debug']
 		);
+
 		if ($configFile) {
 			$this->kernel->setConfigFile($configFile);
 		}
+
 		$this->kernel->boot();
 	}
 
+	/**
+	 * Boot a Symfony application with specified config file
+	 *
+	 * $I->bootKernelWith('tags') will boot the app with config_tags.yml
+	 * When config is not specified the default config.yml is used
+	 *
+	 * @param string|null $configFile
+	 */
 	public function bootKernelWith($configFile = null) {
 		$this->kernel = null;
 		$this->bootKernel($configFile);
@@ -46,27 +63,35 @@ class Functional extends Symfony2 {
 	}
 
 	public function cleanUp() {
+
 		/** @var Filesystem $filesystem */
 		$filesystem = $this->getModule('Filesystem');
 
-		if (file_exists(__DIR__ . '/../../functional/Fixtures/package.json')) {
-			unlink(__DIR__ . '/../../functional/Fixtures/package.json');
-		}
-		if (file_exists(__DIR__ . '/../../functional/Fixtures/app/config/webpack.config.js')) {
-			unlink(__DIR__ . '/../../functional/Fixtures/app/config/webpack.config.js');
-		}
-		if (file_exists(__DIR__ . '/../../functional/Fixtures/web/compiled')) {
-			$filesystem->cleanDir(__DIR__ . '/../../functional/Fixtures/web/compiled');
-		}
-		if (file_exists(__DIR__ . '/../../functional/Fixtures/web/assets')) {
-			$filesystem->cleanDir(__DIR__ . '/../../functional/Fixtures/web/assets');
-		}
-		if (file_exists(__DIR__ . '/../../functional/Fixtures/app/cache')) {
-			$filesystem->cleanDir(__DIR__ . '/../../functional/Fixtures/app/cache');
-		}
+		$filePackageJson
+			= __DIR__ . '/../../functional/Fixtures/package.json';
+		$fileWebpackConfigJs
+			= __DIR__ . '/../../functional/Fixtures/app/config/symfony.webpack.config.js';
+		$fileWebpackConfigRulesJs
+			= __DIR__ . '/../../functional/Fixtures/app/config/webpack-rules.js';
+
+		$dirCache
+			= __DIR__ . '/../../functional/Fixtures/app/cache';
+		$dirCompiled
+			= __DIR__ . '/../../functional/Fixtures/web/compiled';
+		$dirCompiledCustom
+			= __DIR__ . '/../../functional/Fixtures/web/assets';
+
+		file_exists($filePackageJson) && unlink($filePackageJson);
+		file_exists($fileWebpackConfigJs) && unlink($fileWebpackConfigJs);
+		file_exists($fileWebpackConfigRulesJs) && unlink($fileWebpackConfigRulesJs);
+
+		file_exists($dirCache) && $filesystem->cleanDir($dirCache);
+		file_exists($dirCompiled) && $filesystem->cleanDir($dirCompiled);
+		file_exists($dirCompiledCustom) && $filesystem->cleanDir($dirCompiledCustom);
 	}
 
 	public function runCommand($commandServiceId, array $input = []) {
+
 		$this->errorCode = null;
 		$this->commandTester = null;
 
@@ -78,11 +103,14 @@ class Functional extends Symfony2 {
 		$commandTester = new CommandTester($command);
 
 		try {
-			$commandTester->execute([
-					'command' => $command->getName(),
-				] + $input, ['interactive' => false]);
+			$commandTester->execute(
+				['command' => $command->getName()] + $input,
+				['interactive' => false]
+			);
 		} catch (\Exception $e) {
+
 			$exitCode = $e->getCode();
+
 			if (is_numeric($exitCode)) {
 				$exitCode = (int)$exitCode;
 				if (0 === $exitCode) {
@@ -91,8 +119,10 @@ class Functional extends Symfony2 {
 			} else {
 				$exitCode = 1;
 			}
+
 			$this->errorCode = $exitCode;
 			$this->debug((string)$e);
+
 			return;
 		}
 

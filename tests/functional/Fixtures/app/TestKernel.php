@@ -7,7 +7,11 @@ class TestKernel extends Kernel {
 
 	protected $configFile = 'config.yml';
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function registerBundles() {
+
 		$bundles = [
 
 			new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
@@ -19,17 +23,27 @@ class TestKernel extends Kernel {
 			new Fixtures\GoldenPlanet\WebpackTestBundle\GoldenPlanetWebpackTestBundle(),
 			new Fixtures\GoldenPlanet\WebpackAnotherTestBundle\GoldenPlanetWebpackAnotherTestBundle(),
 		];
+
 		return $bundles;
 	}
 
 	/**
+	 * Set kernel config file for current test case
+	 *
 	 * @param string $configFile
 	 */
 	public function setConfigFile($configFile) {
+
 		$this->configFile = 'config_' . $configFile . '.yml';
 	}
 
+	/**
+	 * Invoked before the kernel is boooted
+	 *
+	 * {@inheritDoc}
+	 */
 	public function registerContainerConfiguration(LoaderInterface $loader) {
+
 		$loader->load(__DIR__ . '/config/' . $this->configFile);
 	}
 }

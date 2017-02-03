@@ -1,7 +1,6 @@
 imports:
 
-    - { resource: 'parameters/private.yml' }
-    - { resource: 'parameters/public.yml' }
+    - { resource: 'parameters.yml' }
 
     - { resource: 'services/aliases.yml' }
     - { resource: 'services/asset-helpers.yml' }

@@ -11,11 +11,11 @@ class AssetNameGenerator {
 	 * Thus there's no need to specify a specific
 	 * file name for the output (like in Assetic)
 	 *
-	 * @param string $asset
+	 * @param string $assetPath
 	 *
 	 * @return string
 	 */
-	public function generateName($asset) {
-		return sprintf('%s.%s', pathinfo($asset, PATHINFO_FILENAME), hash('crc32b', $asset));
+	public function generateName($assetPath) {
+		return sprintf('%s.%s', pathinfo($assetPath, PATHINFO_FILENAME), hash('crc32b', $assetPath));
 	}
 }

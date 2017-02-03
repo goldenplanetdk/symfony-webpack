@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 	<meta charset="utf-8">
 
 	{% set cssUrl = webpack_asset('@GoldenPlanetWebpackTestBundle/Resources/assets/customized.js', 'css') %}
@@ -14,7 +13,9 @@
 </head>
 <body>
 
-	<script src="{{ webpack_asset('@GoldenPlanetWebpackTestBundle/Resources/assets/customized.js') }}"></script>
+	<script id="shared" src="{{ webpack_entry('shared') }}"></script>
+
+	<script id="custom" src="{{ webpack_asset('@GoldenPlanetWebpackTestBundle/Resources/assets/customized.js') }}"></script>
 
 	<img src="{{ webpack_asset('@GoldenPlanetWebpackTestBundle/Resources/assets/cat.png') }}"/>
 

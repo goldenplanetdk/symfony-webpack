@@ -26,21 +26,27 @@ class WebpackConfigDumper {
 	}
 
 	/**
+	 * Wrap configuration with a node module export syntax that invokes
+	 * the custom symfony.webpack.config.js with provided configuration
+	 * and then returns the complete config to webpack
+	 *
 	 * @param WebpackConfig $config
 	 *
 	 * @return string
 	 */
 	public function dump(WebpackConfig $config) {
+
 		$configTemplate = 'module.exports = require(%s)(%s);';
+
 		$configContents = sprintf(
 			$configTemplate,
 			json_encode($this->includeConfigPath),
 			json_encode([
-				'entry'         => $config->getEntryPoints(),
-				'alias'         => $config->getAliases(),
-				'manifest_path' => $this->manifestPath,
-				'environment'   => $this->environment,
-				'parameters'    => $this->parameters,
+				'entry'        => $config->getEntryPoints(),
+				'alias'        => $config->getAliases(),
+				'manifestPath' => $this->manifestPath,
+				'environment'  => $this->environment,
+				'parameters'   => $this->parameters,
 			])
 		);
 

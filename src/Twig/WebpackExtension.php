@@ -39,7 +39,7 @@ class WebpackExtension extends Extension {
 		return $this->assetManager->getAssetUrl($resource, $type);
 	}
 
-	public function getCommonsChunkUrl($resource, $type = null) {
+	public function getEntryUrl($resource, $type = null) {
 		return $this->assetManager->getAssetUrl($resource, $type, true);
 	}
 

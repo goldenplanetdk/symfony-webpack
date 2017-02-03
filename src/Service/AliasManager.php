@@ -77,11 +77,14 @@ class AliasManager {
 	}
 
 	private function getShortNameForBundle($bundleName) {
+
 		$shortName = $bundleName;
+
+		// trim trailing `Bundle`
 		if (mb_substr($bundleName, -6) === 'Bundle') {
 			$shortName = mb_substr($shortName, 0, -6);
 		}
-		// this is used by SensioGenerator bundle when generating extension name from bundle name
-		return Container::underscore($shortName);
+
+		return lcfirst(Container::camelize($shortName));
 	}
 }

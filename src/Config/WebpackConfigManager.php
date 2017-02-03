@@ -43,12 +43,15 @@ class WebpackConfigManager {
 
 		$aliases = $this->aliasManager->getAliases();
 
-		$assetResult = $this->assetCollector->getAssets(
-			$previousConfig !== null ? $previousConfig->getCacheContext() : null
-		);
+		$assetResult = $this->assetCollector
+			->getAssets(
+				$previousConfig !== null ? $previousConfig->getCacheContext() : null
+			)
+		;
 
 		$entryPoints = [];
 
+		// collect entry points
 		foreach ($assetResult->getAssets() as $asset) {
 
 			$assetName = $this->assetNameGenerator->generateName($asset);

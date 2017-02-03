@@ -31,16 +31,16 @@ class AssetManager {
 	 * Exception is thrown if manifest does not exit, asset is not in the manifest or
 	 *      type is not provided and cannot be guessed
 	 *
-	 * @param string      $asset
-	 * @param string|null $type        specifies type in manifest, usually "js" or "css"
-	 * @param bool        $isEntryName use custom entry point name, that is manually specified
+	 * @param string      $asset       file path or custom entry point name
+	 * @param string|null $fileType    specifies type in manifest, usually "js" or "css"
+	 * @param bool        $isEntryName it is a custom entry point name, that is manually specified
 	 *                                 in webpack config (e.g. name of a commons chunk)
 	 *
 	 * @return null|string null is returned if type is provided and missing in manifest
 	 *
 	 * @api
 	 */
-	public function getAssetUrl($asset, $type = null, $isEntryName = false) {
+	public function getAssetUrl($asset, $fileType = null, $isEntryName = false) {
 
 		$manifest = $this->getManifest();
 
@@ -51,24 +51,26 @@ class AssetManager {
 		}
 
 		if (!isset($manifest[$assetName])) {
+			
 			throw new RuntimeException(sprintf(
-				'No information in manifest for %s (key %s). %s',
+				"No information in manifest for %s '%s' (key '%s' was not found). %s",
+				($isEntryName ? 'named entry' : 'file'),
 				$asset,
 				$assetName,
 				'Is webpack:dev-server running in the background?'
 			));
 		}
 
-		if ($type === null) {
+		if ($fileType === null) {
 
 			$entryFileType = $this->entryFileManager->getEntryFileType($asset);
-			$type = $entryFileType !== null ? $entryFileType : self::TYPE_JS;
+			$fileType = $entryFileType ?: self::TYPE_JS;
 
-			if (!isset($manifest[$assetName][$type])) {
+			if (!isset($manifest[$assetName][$fileType])) {
 
 				throw new RuntimeException(sprintf(
-					'No information in the manifest for type %s (key %s, asset %s). %s',
-					$type,
+					"No information in the manifest for '%s' file type (key '%s', asset '%s'). %s",
+					$fileType,
 					$assetName,
 					$asset,
 					'Probably extension is unsupported or some misconfiguration issue. '
@@ -78,7 +80,9 @@ class AssetManager {
 			}
 		}
 
-		return isset($manifest[$assetName][$type]) ? $manifest[$assetName][$type] : null;
+		$assetUrl = isset($manifest[$assetName][$fileType]) ? $manifest[$assetName][$fileType] : null;
+
+		return $assetUrl;
 	}
 
 	private function getManifest() {

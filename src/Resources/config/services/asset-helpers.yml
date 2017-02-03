@@ -5,7 +5,7 @@ services:
         public: false
         arguments:
             - '@gp_webpack.asset_provider.dynamic_list'
-            - '%gp_webpack.provider_config%'
+            - '%gp_webpack.asset_providers%'
 
     gp_webpack.asset_locator:
         class: GoldenPlanet\WebpackBundle\Service\AssetLocator

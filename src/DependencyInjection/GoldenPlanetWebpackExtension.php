@@ -25,34 +25,25 @@ class GoldenPlanetWebpackExtension extends Extension {
 		$loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 		$loader->load('services.yml');
 
-		$additionalAliases = $config['aliases']['additional'] + [
-				'root' => '%kernel.root_dir%/..',
-			];
+		$additionalAliases = $config['aliases']['additional'] + ['root' => '%kernel.root_dir%/..'];
 
+		$container->setParameter('gp_webpack.asset_providers', $config['asset_providers']);
 		$container->setParameter('gp_webpack.cache_dir', $config['cache_dir']);
 		$container->setParameter('gp_webpack.working_dir', $config['working_dir']);
-		$container->setParameter('gp_webpack.provider_config', $config['asset_providers']);
-		$container->setParameter('gp_webpack.webpack_config_path', $config['config']['path']);
-		$container->setParameter('gp_webpack.webpack_config_parameters', $config['config']['parameters']);
+		$container->setParameter('gp_webpack.config.path', $config['config']['path']);
+		$container->setParameter('gp_webpack.config.parameters', $config['config']['parameters']);
 
-		if (!$config['entry_file']['enabled']) {
-			// both empty disables the functionality
+		if ($config['entry_file']['enabled']) {
+			$container->setParameter('gp_webpack.entry_file.disabled_extensions', $config['entry_file']['disabled_extensions']);
+			$container->setParameter('gp_webpack.entry_file.enabled_extensions', $config['entry_file']['enabled_extensions']);
+		} else {
 			$container->setParameter('gp_webpack.entry_file.disabled_extensions', []);
 			$container->setParameter('gp_webpack.entry_file.enabled_extensions', []);
-		} else {
-			$container->setParameter(
-				'gp_webpack.entry_file.disabled_extensions',
-				$config['entry_file']['disabled_extensions']
-			);
-			$container->setParameter(
-				'gp_webpack.entry_file.enabled_extensions',
-				$config['entry_file']['enabled_extensions']
-			);
 		}
 		$container->setParameter('gp_webpack.entry_file.type_map', $config['entry_file']['type_map']);
 
 		$container->setParameter('gp_webpack.aliases.register_bundles', $config['aliases']['register_bundles']);
-		$container->setParameter('gp_webpack.aliases.path_in_bundle', $config['aliases']['path_in_bundle']);
+		$container->setParameter('gp_webpack.aliases.bundle_default', $config['aliases']['bundle_default']);
 		$container->setParameter('gp_webpack.aliases.additional', $additionalAliases);
 
 		$container->setParameter('gp_webpack.bin.disable_tty', $config['bin']['disable_tty']);
