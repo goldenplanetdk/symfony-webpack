@@ -227,10 +227,6 @@ class WebpackCompiler {
 
 		$manifest = json_decode(file_get_contents($this->manifestJsonPath), true);
 		$this->manifestStorage->saveManifest($manifest);
-
-		if (!unlink($this->manifestJsonPath)) {
-			throw new RuntimeException('Cannot unlink manifest file at ' . $this->manifestJsonPath);
-		}
 	}
 
 	private function buildProcess(ProcessBuilder $processBuilder, $prefix, $ttyPrefix) {
