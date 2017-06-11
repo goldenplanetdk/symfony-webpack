@@ -1,0 +1,10 @@
+{% extends '@TestCommonsChunk/admin.html.twig' %}
+
+{% block stylesheets %}
+    {% webpack css '@testCommonsChunk/admin-2.js' group='admin' %}
+        <link rel="stylesheet" href="{{ asset_url }}" id="main-css"/>
+    {% end_webpack %}
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ webpack_asset('@testCommonsChunk/admin-2.js', group='admin') }}" id="main-js"></script>
+{% endblock %}

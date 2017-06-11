@@ -1,0 +1,32 @@
+services:
+
+    gp_webpack.asset_provider.twig_directory.base:
+        class: GoldenPlanet\WebpackBundle\Provider\AssetProvider\TwigAssetsFromDirectoriesProvider
+        abstract: true
+        public: false
+        arguments:
+            - '@gp_webpack.asset_provider.twig_file'
+            - '*.twig'
+
+    gp_webpack.asset_provider.twig_file:
+        class: GoldenPlanet\WebpackBundle\Provider\AssetProvider\TwigAssetsFromFileProvider
+        public: false
+        arguments:
+            - '@twig'
+            - '@gp_webpack.error_handler'
+
+    gp_webpack.asset_provider.twig_bundles:
+        parent: gp_webpack.asset_provider.twig_directory.base
+        public: false
+        arguments:
+            - '@gp_webpack.directory_provider.bundles'
+        tags:
+            - { name: gp_webpack.asset_provider }
+
+    gp_webpack.asset_provider.twig_configured_directory:
+        parent: gp_webpack.asset_provider.twig_directory.base
+        public: false
+        arguments:
+            - '@gp_webpack.directory_provider.configured'
+        tags:
+            - { name: gp_webpack.asset_provider }

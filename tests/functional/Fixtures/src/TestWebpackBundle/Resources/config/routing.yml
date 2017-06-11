@@ -1,0 +1,17 @@
+fixtures_test_webpack_homepage:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    TestWebpackBundle::index.html.twig
+
+fixtures_test_webpack_tags:
+    path: /tags
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    TestWebpackBundle::tags.html.twig
+
+fixtures_test_webpack_customized:
+    path: /customized
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    '@viewsCustomized/customized.html.twig'

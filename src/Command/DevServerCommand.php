@@ -2,16 +2,18 @@
 
 namespace GoldenPlanet\WebpackBundle\Command;
 
-use GoldenPlanet\WebpackBundle\Compiler\WebpackCompiler;
+use GoldenPlanet\WebpackBundle\Command\Traits\CommandHelpTrait;
+use GoldenPlanet\WebpackBundle\Webpack\Compiler\WebpackCompiler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
 /**
- * Runs webpack-dev-server
+ * Runs webpack-dev-server.
  */
-class DevServerCommand extends Command {
+class DevServerCommand extends Command
+{
+	use CommandHelpTrait;
 
 	private $compiler;
 
@@ -29,36 +31,22 @@ class DevServerCommand extends Command {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
-	protected function configure() {
+	protected function configure()
+	{
 		$this
 			->setName('webpack:dev-server')
-			->setDescription('Run a webpack-dev-server as a separate process on localhost:8080')
-			->setHelp(<<<EOT
-The <info>%command.name%</info> command runs webpack-dev-server as a separate process, it listens on <info>localhost:8080</info>. By default, assets in development environment are pointed to <info>http://localhost:8080/compiled/*</info>.
-
-    <info>%command.full_name%</info>
-EOT
-			)
+			->setDescription(Description::DEV_SERVER)
+			->setHelp($this->getDevServerCommandHelp())
 		;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
-
-		$this->compiler->compileAndWatch(
-			function ($type, $buffer) use ($output) {
-
-				if (Process::ERR === $type) {
-					$output->write('<error>' . $buffer . '</error>');
-				} else {
-					$output->write($buffer);
-				}
-			},
-			true
-		);
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
+		$this->compiler->compileAndWatch($output, true);
 	}
 }

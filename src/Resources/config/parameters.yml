@@ -1,27 +1,44 @@
 parameters:
 
-    gp_webpack.aliases.register_bundles: ''
-    gp_webpack.aliases.bundle_default: ''
+    # Parameters are populated in GoldenPlanetWebpackExtension
+    # and are based on options provided in `golden_planet_webpack` config
+
+    # Symfony Bundles and explicit directories
+    gp_webpack.enabled_bundles: ''
+    gp_webpack.twig_directories: ''
+
+    # Cache dir. Default is '%kernel.cache_dir%'
+    gp_webpack.cache_directory: ''
+
+    # Aliases
+    gp_webpack.aliases.path_in_bundle: ''
     gp_webpack.aliases.additional: ''
 
-    gp_webpack.asset_providers: ''
+    # Webpack working dir. Default is '%kernel.root_dir%/..'
+    gp_webpack.bin.working_directory: ''
 
+    # Webpack executables
     gp_webpack.bin.webpack.executable: ''
-    gp_webpack.bin.webpack.tty_prefix: ''
     gp_webpack.bin.webpack.arguments: ''
     gp_webpack.bin.dev_server.executable: ''
-    gp_webpack.bin.dev_server.tty_prefix: ''
     gp_webpack.bin.dev_server.arguments: ''
     gp_webpack.bin.disable_tty: ''
+    gp_webpack.dashboard.enabled: ''
+    gp_webpack.dashboard.executable: ''
 
+    # Path to webpack.symfony.config.js
     gp_webpack.config.path: ''
+
+    # Additional options for webpack.symfony.config.js
     gp_webpack.config.parameters: ''
 
-    gp_webpack.cache_dir: ''
-    gp_webpack.working_dir: ''
+    # Allowed/prohibited file extensions for entry files
+    gp_webpack.entry_file.disabled_extensions: ''
+    gp_webpack.entry_file.enabled_extensions: ''
+    gp_webpack.entry_file.type_map: ''
 
     # Private parameters, not configurable in app's config.yml
-    gp_webpack.webpack_entry_config_path: '%gp_webpack.cache_dir%/webpack.config.js'
-    gp_webpack.manifest_file_path:        '%gp_webpack.cache_dir%/webpack_manifest.php'
-    gp_webpack.json_manifest_file_path:   '%gp_webpack.cache_dir%/webpack_manifest.json'
+    gp_webpack.webpack_entry_config_path: '%gp_webpack.cache_directory%/webpack.config.js'
+    gp_webpack.manifest_php_file_path:    '%gp_webpack.cache_directory%/webpack-manifest.php'
+    gp_webpack.manifest_json_file_path:   '%gp_webpack.cache_directory%/webpack-manifest.json'
 

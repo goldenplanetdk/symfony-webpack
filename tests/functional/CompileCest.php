@@ -1,30 +1,43 @@
 <?php
 
-class CompileCest {
-
-	public function _before(FunctionalTester $I) {
+class CompileCest
+{
+	public function _before(FunctionalTester $I)
+	{
 		$I->cleanUp();
 	}
 
-	public function _after(FunctionalTester $I) {
+	public function _after(FunctionalTester $I)
+	{
 		$I->cleanUp();
 	}
 
-	public function getInternalErrorIfAssetsNotDumped(FunctionalTester $I) {
+	public function getInternalErrorIfAssetsNotDumped(FunctionalTester $I)
+	{
 		$I->bootKernelWith();
-		$I->amOnPage('/');
-		$I->canSeeResponseCodeIs(500);
-		$I->see('Manifest file not found');
+		try {
+			$I->amOnPage('/');
+			$I->canSeeResponseCodeIs(500);
+			$I->see('Manifest file not found');
+		} catch (\LogicException $logicException) {
+			// handle case for earlier symfony where there is no error listener
+		}
 	}
 
-	public function getNoErrorIfAssetsAreDumped(FunctionalTester $I) {
-
+	public function getNoErrorIfAssetsAreDumped(FunctionalTester $I)
+	{
 		$I->bootKernelWith();
 
+		// Ensure that the necessary files are copied after `webpack:setup` command
 		$I->runCommand('gp_webpack.command.setup');
 		$I->seeFileFound(__DIR__ . '/Fixtures/package.json');
-		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/symfony.webpack.config.js');
-		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/webpack-rules.js');
+		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/' . \Helper\Functional::WEBPACK_SYMFONY_CONFIG_FILE_NAME);
+
+		$I->extendSymfonyWebpackConfig('extended');
+		// Ensure that `webpack.symfony.config.js` is renamed to `webpack.default.config.js`
+		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/' . \Helper\Functional::WEBPACK_DEFAULT_CONFIG_FILE_NAME);
+		// Ensure that `webpack.extended.config.js` is copied to `webpack.symfony.config.js`
+		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/' . \Helper\Functional::WEBPACK_SYMFONY_CONFIG_FILE_NAME);
 
 		$I->runCommand('gp_webpack.command.compile');
 		$I->seeCommandStatusCode(0);
@@ -47,7 +60,8 @@ class CompileCest {
 		$I->canSeeInThisFile('.red');
 	}
 
-	public function getErrorFromBundleWithoutErrorSuppressing(FunctionalTester $I) {
+	public function getErrorFromBundleWithoutErrorSuppressing(FunctionalTester $I)
+	{
 		$I->bootKernelWith('bundle_error');
 
 		$I->runCommand('gp_webpack.command.setup');
@@ -55,7 +69,8 @@ class CompileCest {
 		$I->seeCommandStatusCode(1);
 	}
 
-	public function getErrorWithTwigParseError(FunctionalTester $I) {
+	public function getErrorWithTwigParseError(FunctionalTester $I)
+	{
 		$I->bootKernelWith('parse_error');
 
 		$I->runCommand('gp_webpack.command.setup');
@@ -63,7 +78,8 @@ class CompileCest {
 		$I->seeCommandStatusCode(1);
 	}
 
-	public function getErrorWithTwigParseErrorIfIgnoringUnknowns(FunctionalTester $I) {
+	public function getErrorWithTwigParseErrorIfIgnoringUnknowns(FunctionalTester $I)
+	{
 		$I->bootKernelWith('parse_error2');
 
 		$I->runCommand('gp_webpack.command.setup');
@@ -71,7 +87,8 @@ class CompileCest {
 		$I->seeCommandStatusCode(1);
 	}
 
-	public function getNoErrorWithTwigParseErrorIfSuppressing(FunctionalTester $I) {
+	public function getNoErrorWithTwigParseErrorIfSuppressing(FunctionalTester $I)
+	{
 		$I->bootKernelWith('parse_error_suppress');
 
 		$I->runCommand('gp_webpack.command.setup');
@@ -79,7 +96,8 @@ class CompileCest {
 		$I->seeCommandStatusCode(0);
 	}
 
-	public function getErrorWithTwigUnknowns(FunctionalTester $I) {
+	public function getErrorWithTwigUnknowns(FunctionalTester $I)
+	{
 		$I->bootKernelWith('unknowns');
 
 		$I->runCommand('gp_webpack.command.setup');
@@ -87,7 +105,8 @@ class CompileCest {
 		$I->seeCommandStatusCode(1);
 	}
 
-	public function getNoErrorWithTwigUnknownsIfIgnoring(FunctionalTester $I) {
+	public function getNoErrorWithTwigUnknownsIfIgnoring(FunctionalTester $I)
+	{
 		$I->bootKernelWith('unknowns_suppress');
 
 		$I->runCommand('gp_webpack.command.setup');

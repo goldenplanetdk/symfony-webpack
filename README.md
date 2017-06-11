@@ -54,21 +54,21 @@ Single entry point (`.js`, `.ts`, `.coffee` etc.) in `twig` templates:
 Multiple entry points:
 
 ```twig
-{% webpack_javascripts
+{% webpack js
 	'@acmeHello/main.js'
 	'@acmeHello/another-entry-point.js'
 %}
 	<script defer src="{{ asset_url }}"><script>
-{% end_webpack_javascripts %}
+{% end_webpack %}
 ```
 
 ```twig
-{% webpack_stylesheets
+{% webpack css
 	'@acmeHello/main.js'
 	'@acmeHello/another-entry-point.js'
 %}
 	<link rel="stylesheet" href="{{ asset_url }}"><script>
-{% end_webpack_stylesheets %}
+{% end_webpack %}
 ```
 
 To avoid having a `link` element with an empty `href` in the DOM when the script may possibly not emit a stylesheet, test the value returned from `webpack_asset` before inserting the `link` element:
@@ -103,16 +103,17 @@ module.exports = function makeWebpackConfig(symfonyOptions) {
 }
 ```
 
-Then add the script that will load the common libs before any other script that may depend on it. Use the `webpack_entry` function to inject the actual compiled asset path:
+Then add the script that will load the common libs before any other script that may depend on it. 
+Use the `webpack_named_asset` function to inject the actual compiled asset path:
 
 ```twig
-<script defer src="{{ webpack_entry('jquery-and-lodash') }}"><script>
+<script defer src="{{ webpack_named_asset('jquery-and-lodash') }}"><script>
 ```
 
 Commons chunk may contain other type of assets:
 
 ```twig
-<link rel="stylesheet" href="{{ webpack_entry('shared', 'css') }}">
+<link rel="stylesheet" href="{{ webpack_named_asset('shared', 'css') }}">
 ```
 
 The rendered output of above in production mode will be something like:
@@ -133,11 +134,11 @@ You can pass any kind of resources to webpack with `webpack_asset` function for 
 <img src="{{ webpack_asset('@AcmeHelloBundle/Resources/public/images/background.jpg') }}">
 ```
 
-Or with `webpack_assets` tag for multiple entry points:
+Or with `webpack` tag for multiple entry points:
 
 ```
 <ul class="nav nav-pills social-icons">
-	{% webpack_assets
+	{% webpack
 		'@AcmeHelloBundle/Resources/public/images/facebook.jpg'
 		'@AcmeHelloBundle/Resources/public/images/twitter.jpg'
 		'@AcmeHelloBundle/Resources/public/images/youtube.jpg'
@@ -145,7 +146,7 @@ Or with `webpack_assets` tag for multiple entry points:
 		<li>
 			<img src="{{ asset_url }}">
 		</li>
-	{% end_webpack_assets %}
+	{% end_webpack %}
 </ul>
 ```
 

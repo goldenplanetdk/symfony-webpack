@@ -1,0 +1,29 @@
+fixtures_test_commons_chunk_admin1:
+    path: /commons-chunk/admin-1
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    TestCommonsChunkBundle::admin1.html.twig
+
+fixtures_test_commons_chunk_admin2:
+    path: /commons-chunk/admin-2
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    TestCommonsChunkBundle::admin2.html.twig
+
+fixtures_test_commons_chunk_front1:
+    path: /commons-chunk/front-1
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    TestCommonsChunkBundle::front1.html.twig
+
+fixtures_test_commons_chunk_front2:
+    path: /commons-chunk/front-2
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    TestCommonsChunkBundle::front2.html.twig
+
+fixtures_test_commons_chunk_vendor:
+    path: /commons-chunk/vendor
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    TestCommonsChunkBundle::vendor.html.twig

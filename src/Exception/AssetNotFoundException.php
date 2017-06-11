@@ -4,6 +4,6 @@ namespace GoldenPlanet\WebpackBundle\Exception;
 
 use RuntimeException;
 
-class AssetNotFoundException extends RuntimeException {
-
+class AssetNotFoundException extends RuntimeException
+{
 }

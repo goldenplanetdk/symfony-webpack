@@ -5,8 +5,8 @@ namespace GoldenPlanet\WebpackBundle\Exception;
 use Exception;
 use RuntimeException;
 
-class InvalidResourceException extends RuntimeException {
-
+class InvalidResourceException extends RuntimeException
+{
 	/**
 	 * @var mixed
 	 */
@@ -18,7 +18,8 @@ class InvalidResourceException extends RuntimeException {
 	 * @param int            $code
 	 * @param Exception|null $previous
 	 */
-	public function __construct($message, $resource, $code = 0, Exception $previous = null) {
+	public function __construct($message, $resource, $code = 0, Exception $previous = null)
+	{
 		parent::__construct($message . '. Got ' . gettype($resource), $code, $previous);
 		$this->resource = $resource;
 	}
@@ -26,7 +27,8 @@ class InvalidResourceException extends RuntimeException {
 	/**
 	 * @return mixed
 	 */
-	public function getResource() {
+	public function getResource()
+	{
 		return $this->resource;
 	}
 }

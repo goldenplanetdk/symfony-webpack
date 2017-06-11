@@ -4,8 +4,8 @@ namespace GoldenPlanet\WebpackBundle\Service;
 
 use GoldenPlanet\WebpackBundle\Exception\AssetNotFoundException;
 
-class AssetResolver {
-
+class AssetResolver
+{
 	private $assetLocator;
 	private $entryFileManager;
 
@@ -21,10 +21,11 @@ class AssetResolver {
 	 * @param string $asset
 	 *
 	 * @return string
+	 *
 	 * @throws AssetNotFoundException
 	 */
-	public function resolveAsset($asset) {
-
+	public function resolveAsset($asset)
+	{
 		$assetParts = [];
 
 		$position = strrpos($asset, '!');

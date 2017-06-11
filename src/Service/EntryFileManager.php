@@ -2,8 +2,8 @@
 
 namespace GoldenPlanet\WebpackBundle\Service;
 
-class EntryFileManager {
-
+class EntryFileManager
+{
 	private $enabledExtensions;
 	private $disabledExtensions;
 	private $typeMap;
@@ -28,8 +28,8 @@ class EntryFileManager {
 	 *
 	 * @return int|null|string
 	 */
-	public function getEntryFileType($asset) {
-
+	public function getEntryFileType($asset)
+	{
 		$assetPath = $this->removeLoaders($asset);
 		$assetType = strtolower(pathinfo($assetPath, PATHINFO_EXTENSION));
 
@@ -45,19 +45,22 @@ class EntryFileManager {
 	 *
 	 * @return bool
 	 */
-	public function isEntryFile($asset) {
+	public function isEntryFile($asset)
+	{
 		return $this->getEntryFileType($asset) !== null;
 	}
 
 	/**
-	 * Remove leading loaders from the asset path
+	 * Remove leading loaders from the asset path.
 	 *
 	 * @param string $asset
 	 *
 	 * @return string
 	 */
-	private function removeLoaders($asset) {
+	private function removeLoaders($asset)
+	{
 		$position = strrpos($asset, '!');
+
 		return $position === false ? $asset : substr($asset, $position + 1);
 	}
 
@@ -66,8 +69,8 @@ class EntryFileManager {
 	 *
 	 * @return bool
 	 */
-	private function isExtensionIncluded($extension) {
-
+	private function isExtensionIncluded($extension)
+	{
 		if (count($this->enabledExtensions) === 0) {
 			$isExtensionIncluded = count($this->disabledExtensions) > 0 && !in_array($extension, $this->disabledExtensions, true);
 		} else {
@@ -82,12 +85,11 @@ class EntryFileManager {
 	 *
 	 * @return int|string
 	 */
-	private function mapExtension($extension) {
-
+	private function mapExtension($extension)
+	{
 		foreach ($this->typeMap as $mappedExtension => $fromExtensions) {
 
 			if (in_array($extension, $fromExtensions, true)) {
-
 				return $mappedExtension;
 			}
 		}

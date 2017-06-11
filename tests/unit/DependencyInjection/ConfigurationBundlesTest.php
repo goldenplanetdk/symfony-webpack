@@ -6,19 +6,19 @@ use Codeception\TestCase\Test;
 use GoldenPlanet\WebpackBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationBundlesTest extends Test {
-
+class ConfigurationBundlesTest extends Test
+{
 	/**
 	 * Test resulting bundles list
-	 * according to applied `asset_providers` value in custom config
+	 * according to applied `enabled_bundles` value in custom config.
 	 *
-	 * @param array|null $expected
 	 * @param array      $config
+	 * @param array|null $expected
 	 *
 	 * @dataProvider bundlesResourceDataProvider
 	 */
-	public function testBundlesResource($expected, $config) {
-
+	public function testBundlesResource($config, $expected)
+	{
 		$bundles = [
 			'MyFirstBundle',
 			'MySecondBundle',
@@ -28,92 +28,53 @@ class ConfigurationBundlesTest extends Test {
 		$processor = new Processor();
 
 		$result = $processor->processConfiguration($configuration, [$config]);
-		$found = false;
 
-		foreach ($result['asset_providers'] as $assetProvider) {
-
-			if ($assetProvider['type'] === 'twig_bundles') {
-				$found = true;
-				$this->assertSame($expected, $assetProvider['resource']);
-			}
-		}
-
-		if ($expected === null) {
-			$this->assertFalse($found);
-		}
+		$this->assertSame($expected, $result['enabled_bundles']);
 	}
 
 	/**
 	 * @return array
 	 */
-	public function bundlesResourceDataProvider() {
+	public function bundlesResourceDataProvider()
+	{
 		return [
-			'`asset_providers` not specified: all bundles should be added'                => [
-				// expected bundles list
-				[
-					'MyFirstBundle',
-					'MySecondBundle',
-				],
+			'`enabled_bundles` not specified: all bundles should be added' => [
 				// config.yml
 				[],
-			],
-			'`twig_bundles` is null: all bundles should be added'                         => [
 				// expected bundles list
 				[
 					'MyFirstBundle',
 					'MySecondBundle',
 				],
+			],
+			'`enabled_bundles` is null: all bundles should be added' => [
 				// config.yml
 				[
-					'asset_providers' => [
-						[
-							'type'     => 'twig_bundles',
-							'resource' => null,
-						],
-					],
+					'enabled_bundles' => null,
 				],
-			],
-			'`twig_bundles` is empty: all bundles should be added'                        => [
 				// expected bundles list
 				[
 					'MyFirstBundle',
 					'MySecondBundle',
 				],
+			],
+			'`enabled_bundles` are specified: default list of bundles should be overwritten' => [
 				// config.yml
 				[
-					'asset_providers' => [
-						[
-							'type'     => 'twig_bundles',
-							'resource' => [],
-						],
+					'enabled_bundles' => [
+						'MyFirstBundle',
 					],
 				],
-			],
-			'`twig_bundles` are specified: default list of bundles should be overwritten' => [
 				// expected bundles list
 				['MyFirstBundle'],
-				// config.yml
-				[
-					'asset_providers' => [
-						[
-							'type'     => 'twig_bundles',
-							'resource' => ['MyFirstBundle'],
-						],
-					],
-				],
 			],
-			'`twig_directory` is specified: list of bundles should be removed when'       => [
-				// expected bundles list
-				null,
+			'`enabled_bundles` is specified: list of bundles should be empty' => [
 				// config.yml
 				[
-					'asset_providers' => [
-						[
-							'type'     => 'twig_directory',
-							'resource' => '%kernel.root_dir%/Resources/views',
-						],
-					],
+					'enabled_bundles' => [],
 				],
+				// expected bundles list
+				[],
 			],
 		];
 	}

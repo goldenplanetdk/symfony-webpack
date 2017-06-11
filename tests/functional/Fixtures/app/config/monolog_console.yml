@@ -1,0 +1,22 @@
+monolog:
+
+    handlers:
+
+        console_stderr:
+            type: stream
+            path: "php://stderr"
+            formatter: monolog.line_formatter.with_linefeeds
+            bubble: false
+            level: warning
+
+        console_stdout:
+            channels: [app]
+            type: stream
+            path: "php://stdout"
+            formatter: monolog.line_formatter.with_linefeeds
+            level: debug
+
+services:
+    monolog.line_formatter.with_linefeeds:
+        class: Monolog\Formatter\LineFormatter
+        arguments: [~, ~, true]

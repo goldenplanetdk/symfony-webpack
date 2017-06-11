@@ -1,0 +1,12 @@
+{% extends '@TestCommonsChunk/front.html.twig' %}
+
+{% block stylesheets %}
+    {% webpack css '@testCommonsChunk/front-2.js' %}
+        <link rel="stylesheet" href="{{ asset_url }}" id="main-css"/>
+    {% end_webpack %}
+{% endblock %}
+{% block javascripts %}
+    {% webpack js '@testCommonsChunk/front-2.js' %}
+        <script src="{{ asset_url }}" id="main-js"></script>
+    {% end_webpack %}
+{% endblock %}

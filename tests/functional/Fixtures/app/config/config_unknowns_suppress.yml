@@ -1,11 +1,11 @@
-imports: [{resource: 'common.yml'}]
+imports: [{ resource: 'common.yml' }]
 
 golden_planet_webpack:
 
-    asset_providers:
-        -
-            type: twig_directory
-            resource: %kernel.root_dir%/Resources/views-unknowns
+    enabled_bundles:
+        - TestWebpackBundle
 
     twig:
         suppress_errors: ignore_unknowns
+        additional_directories:
+            - '%kernel.root_dir%/Resources/views-unknowns'

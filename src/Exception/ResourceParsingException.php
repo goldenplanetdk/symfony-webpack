@@ -2,6 +2,6 @@
 
 namespace GoldenPlanet\WebpackBundle\Exception;
 
-class ResourceParsingException extends \RuntimeException {
-
+class ResourceParsingException extends \RuntimeException
+{
 }

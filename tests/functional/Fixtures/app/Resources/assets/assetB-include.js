@@ -1,1 +1,1 @@
-require('@GoldenPlanetWebpackTestBundle/Resources/additional-assets/assetB.js');
+require('@TestWebpackBundle/Resources/assets/assetB.js');

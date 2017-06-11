@@ -7,7 +7,7 @@ use Exception;
 /**
  * @api
  */
-interface ErrorHandlerInterface {
-
+interface ErrorHandlerInterface
+{
 	public function processException(Exception $exception);
 }

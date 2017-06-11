@@ -1,38 +1,55 @@
+# https://docs.travis-ci.com/user/customizing-the-build
+
 language: php
 
 sudo: false
-
-php:
-    - 5.6
 
 env:
   global:
     - TRAVIS_NODE_VERSION="6"
     - COMPOSER_NO_INTERACTION="1"
-  matrix:
-    # install vendor packages with lowest version
-    - COMPOSER_ARGS="--prefer-lowest"
-    # install vendor packages with newest version and run Codeception with coverage
-    - WITH_COVERAGE=true
+
+matrix:
+    include:
+
+        # install vendor packages with lowest version
+#        - php: 5.4
+#          env: COMPOSER_ARGS="--prefer-lowest"
+
+        # install vendor packages with newest version and run Codeception with coverage
+        - php: 7.1
+          env: WITH_COVERAGE=true
+
+        # with PHP Coding Standards Fixer
+        - php: 7.1
+          env: WITH_CS_FIXER=true
 
 cache:
   directories:
     - $HOME/.composer/cache
     - $HOME/.npm
+  yarn: true
 
 before_install:
-    - if [ -z "${WITH_COVERAGE}" ]; then phpenv config-rm xdebug.ini; fi
+    - if [ -z "$WITH_COVERAGE" ]; then phpenv config-rm xdebug.ini; fi
 
 install:
     - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
+    - export PATH=$HOME/.yarn/bin:$PATH
+
+    # Using PHP CS Fixer on CI http://cs.sensiolabs.org/#using-php-cs-fixer-on-ci
+    - IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "${TRAVIS_COMMIT_RANGE}")); unset IFS
 
 before_script:
     - bash -c "composer update $COMPOSER_ARGS"
 
 script:
-    - if [ "${WITH_COVERAGE}" == "true" ]; then COVERAGE_OPTION="--coverage-xml"; fi
+    - if [ "$WITH_COVERAGE" == "true" ]; then COVERAGE_OPTION="--coverage-xml"; fi
     - vendor/bin/codecept run $COVERAGE_OPTION
 
 after_success:
-    # send coverage report to coveralls.io
-    - if [ "${WITH_COVERAGE}" == "true" ]; then travis_retry php vendor/bin/coveralls; fi
+    # Run PHP Coding Standards Fixer
+    - if [[ "$WITH_CS_FIXER" == "true" ]]; then vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run --stop-on-violation --using-cache=no --path-mode=intersection "${COMMIT_SCA_FILES[@]}"; fi
+    # Send coverage report to coveralls.io
+    - if [ "$WITH_COVERAGE" == "true" ]; then travis_retry php vendor/bin/coveralls; fi

@@ -2,73 +2,51 @@
 
 namespace GoldenPlanet\WebpackBundle\Command;
 
-use GoldenPlanet\WebpackBundle\Compiler\WebpackCompiler;
-use Psr\Log\LoggerInterface;
+use GoldenPlanet\WebpackBundle\Command\Traits\CommandHelpTrait;
+use GoldenPlanet\WebpackBundle\Webpack\Compiler\WebpackCompiler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
 /**
- * Runs webpack with specific arguments
+ * Runs webpack
  */
-class CompileCommand extends Command {
+class CompileCommand extends Command
+{
+	use CommandHelpTrait;
 
 	private $compiler;
-	private $logger;
 
 	/**
 	 * CompileCommand constructor.
 	 *
 	 * @param WebpackCompiler $compiler
-	 * @param LoggerInterface $logger
 	 */
 	public function __construct(
-		WebpackCompiler $compiler,
-		LoggerInterface $logger
+		WebpackCompiler $compiler
 	) {
 		parent::__construct('webpack:compile');
 
 		$this->compiler = $compiler;
-		$this->logger = $logger;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
-	protected function configure() {
+	protected function configure()
+	{
 		$this
 			->setName('webpack:compile')
-			->setDescription('Compile webpack assets')
-			->setHelp(<<<EOT
-The <info>%command.name%</info> command compiles webpack assets.
-
-    <info>%command.full_name%</info>
-
-Pass the --env=prod flag to compile for production.
-
-    <info>%command.full_name% --env=prod</info>
-EOT
-			)
+			->setDescription(Description::COMPILE)
+			->setHelp($this->getCompileCommandHelp())
 		;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
-
-		$logger = $this->logger;
-
-		$this->compiler->compile(function ($type, $buffer) use ($output, $logger) {
-
-			if (Process::ERR === $type) {
-				$logger->error($buffer);
-				$output->write('<error>' . $buffer . '</error>');
-			} else {
-				$logger->debug($buffer);
-				$output->write($buffer);
-			}
-		});
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
+		$this->compiler->compile($output);
 	}
 }

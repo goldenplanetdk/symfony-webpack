@@ -1,0 +1,6 @@
+imports: [{ resource: 'common.yml' }]
+
+golden_planet_webpack:
+
+    enabled_bundles:
+        - TestCommonsChunkBundle

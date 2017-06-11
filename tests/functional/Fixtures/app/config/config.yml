@@ -1,11 +1,13 @@
-imports: [{resource: 'common.yml'}]
+imports: [{ resource: 'common.yml' }]
 
 golden_planet_webpack:
 
-    asset_providers:
-        -
-            type: twig_bundles
-            resource: [GoldenPlanetWebpackTestBundle]
+    enabled_bundles:
+        - TestWebpackBundle
 
     twig:
         suppress_errors: false
+
+    config:
+        parameters:
+            extractCss: false

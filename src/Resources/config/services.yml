@@ -1,14 +1,16 @@
 imports:
 
     - { resource: 'parameters.yml' }
+    - { resource: 'resources.yml' }
 
-    - { resource: 'services/aliases.yml' }
-    - { resource: 'services/asset-helpers.yml' }
-    - { resource: 'services/asset-providers.yml' }
-    - { resource: 'services/commands.yml' }
-    - { resource: 'services/error-handlers.yml' }
-    - { resource: 'services/resources.yml' }
-    - { resource: 'services/twig.yml' }
-    - { resource: 'services/webpack-compiler.yml' }
-    - { resource: 'services/webpack-config.yml' }
+    - { resource: 'providers/alias.provider.yml' }
+    - { resource: 'providers/asset.provider.yml' }
+    - { resource: 'providers/directory.provider.yml' }
+
+    - { resource: 'services/asset-helper.services.yml' }
+    - { resource: 'services/command.services.yml' }
+    - { resource: 'services/error-handler.services.yml' }
+    - { resource: 'services/twig.services.yml' }
+    - { resource: 'services/webpack-compiler.services.yml' }
+    - { resource: 'services/webpack-config.services.yml' }
 

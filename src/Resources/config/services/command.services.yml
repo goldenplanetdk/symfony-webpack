@@ -1,0 +1,32 @@
+services:
+
+    gp_webpack.command.compile:
+        class: GoldenPlanet\WebpackBundle\Command\CompileCommand
+        tags:
+            - { name: console.command }
+        arguments: 
+            - '@gp_webpack.webpack_compiler'
+
+    gp_webpack.command.watch:
+        class: GoldenPlanet\WebpackBundle\Command\WatchCommand
+        tags:
+            - { name: console.command }
+        arguments:
+            - '@gp_webpack.webpack_compiler'
+
+    gp_webpack.command.dev_server:
+        class: GoldenPlanet\WebpackBundle\Command\DevServerCommand
+        tags:
+            - { name: console.command }
+        arguments: 
+            - '@gp_webpack.webpack_compiler'
+
+    gp_webpack.command.setup:
+        class: GoldenPlanet\WebpackBundle\Command\SetupCommand
+        tags:
+            - { name: console.command }
+        arguments:
+            - '@gp_webpack.file_path.package_json'
+            - '@gp_webpack.file_path.webpack_config.default'
+            - '%kernel.root_dir%/..'
+            - '%kernel.root_dir%/config'

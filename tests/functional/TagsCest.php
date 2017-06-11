@@ -1,24 +1,22 @@
 <?php
 
-class TagsCest {
-
-	public function _before(FunctionalTester $I) {
+class TagsCest
+{
+	public function _before(FunctionalTester $I)
+	{
 		$I->cleanUp();
 	}
 
-	public function _after(FunctionalTester $I) {
+	public function _after(FunctionalTester $I)
+	{
 		$I->cleanUp();
 	}
 
-	public function getNoErrorIfAssetsAreDumped(FunctionalTester $I) {
-
+	public function getNoErrorIfAssetsAreDumped(FunctionalTester $I)
+	{
 		$I->bootKernelWith('tags');
 
 		$I->runCommand('gp_webpack.command.setup');
-		$I->seeFileFound(__DIR__ . '/Fixtures/package.json');
-		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/symfony.webpack.config.js');
-		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/webpack-rules.js');
-
 		$I->runCommand('gp_webpack.command.compile');
 		$I->seeCommandStatusCode(0);
 		$I->seeInCommandDisplay('webpack');

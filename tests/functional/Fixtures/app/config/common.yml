@@ -1,14 +1,23 @@
+imports:
+    - { resource: monolog_console.yml }
+#    - { resource: monolog_file.yml }
+
 framework:
+
+    profiler: ~
+
+    router:
+        resource: '%kernel.root_dir%/config/routing.yml'
+        strict_requirements: ~
 
     secret: 'secret'
 
     templating:
         engines: ['twig', 'php']
 
-    router:
-        resource: "@GoldenPlanetWebpackTestBundle/Resources/config/routing.yml"
-        strict_requirements: ~
-
-    profiler: ~
-
     translator: ~
+
+golden_planet_webpack:
+    config:
+        parameters:
+            logConfig: true

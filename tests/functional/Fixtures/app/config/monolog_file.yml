@@ -1,0 +1,11 @@
+monolog:
+
+    handlers:
+
+        file:
+            # create a new log file every day
+            type:  rotating_file
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            formatter: monolog.line_formatter.with_linefeeds
+            max_files: 1
+            level: debug

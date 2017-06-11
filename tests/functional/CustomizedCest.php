@@ -1,24 +1,22 @@
 <?php
 
-class CustomizedCest {
-
-	public function _before(FunctionalTester $I) {
+class CustomizedCest
+{
+	public function _before(FunctionalTester $I)
+	{
 		$I->cleanUp();
 	}
 
-	public function _after(FunctionalTester $I) {
+	public function _after(FunctionalTester $I)
+	{
 		$I->cleanUp();
 	}
 
-	public function getNoErrorIfAssetsAreDumped(FunctionalTester $I) {
-
+	public function getNoErrorIfAssetsAreDumped(FunctionalTester $I)
+	{
 		$I->bootKernelWith('customized');
 
 		$I->runCommand('gp_webpack.command.setup');
-		$I->seeFileFound(__DIR__ . '/Fixtures/package.json');
-		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/symfony.webpack.config.js');
-		$I->seeFileFound(__DIR__ . '/Fixtures/app/config/webpack-rules.js');
-
 		$I->runCommand('gp_webpack.command.compile');
 		$I->seeCommandStatusCode(0);
 		$I->seeInCommandDisplay('webpack');
@@ -35,13 +33,10 @@ class CustomizedCest {
 		$I->openFile(__DIR__ . '/Fixtures/web/assets/' . $matches[1]);
 		$I->canSeeInThisFile('.green');
 		$I->canSeeInThisFile('.red');
-		$I->canSeeInThisFile('-ms-fullscreen a.css');
 		$I->amGoingTo('Check if less file was compiled');
 		$I->canSeeInThisFile('color: #123456');
-		$I->canSeeInThisFile('-ms-fullscreen a.less');
 		$I->amGoingTo('Check if sass file was compiled');
 		$I->canSeeInThisFile('color: #654321');
-		$I->canSeeInThisFile('-ms-fullscreen a.scss');
 		$I->amGoingTo('Check if cat.png was included');
 		$I->canSeeInThisFile('background: url(/assets/');
 
@@ -52,8 +47,8 @@ class CustomizedCest {
 		$I->openFile(__DIR__ . '/Fixtures/web/assets/' . $matches[1]);
 		$I->canSeeInThisFile('color: #123456');
 
-		$I->seeInSource('<script id="custom" src="/assets/');
-		$src = $I->grabAttributeFrom('script#custom', 'src');
+		$I->seeInSource('<script src="/assets/');
+		$src = $I->grabAttributeFrom('script', 'src');
 		preg_match('#/assets/(.*)#', $src, $matches);
 		$I->seeFileFound(__DIR__ . '/Fixtures/web/assets/' . $matches[1]);
 		$I->openFile(__DIR__ . '/Fixtures/web/assets/' . $matches[1]);
@@ -67,10 +62,5 @@ class CustomizedCest {
 		$src = $I->grabAttributeFrom('img', 'src');
 		preg_match('#/assets/(.*)#', $src, $matches);
 		$I->seeFileFound(__DIR__ . '/Fixtures/web/assets/' . $matches[1]);
-		// TODO find decent alternative to ImageMin that would install without issues on CentOS
-//		$I->seeFileIsSmallerThan(
-//			__DIR__ . '/Fixtures/web/assets/' . $matches[1],
-//			__DIR__ . '/Fixtures/src/WebpackTestBundle/Resources/assets/cat.png'
-//		);
 	}
 }

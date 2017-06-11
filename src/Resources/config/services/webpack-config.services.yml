@@ -1,0 +1,24 @@
+services:
+
+    gp_webpack.webpack_config_dumper:
+        class: GoldenPlanet\WebpackBundle\Webpack\Config\WebpackConfigDumper
+        public: false
+        arguments:
+            - '%gp_webpack.webpack_entry_config_path%'
+            - '%gp_webpack.config.path%'
+            - '%gp_webpack.manifest_json_file_path%'
+            - '%kernel.environment%'
+            - '%gp_webpack.config.parameters%'
+
+    gp_webpack.webpack_config_manager:
+        class: GoldenPlanet\WebpackBundle\Webpack\Config\WebpackConfigManager
+        public: false
+        arguments:
+            - '@gp_webpack.alias_provider'
+            - '@gp_webpack.asset_collector'
+            - '@gp_webpack.webpack_config_dumper'
+            - '%gp_webpack.webpack_entry_config_path%'
+            - '@gp_webpack.asset_resolver'
+            - '@gp_webpack.asset_name_generator'
+            - '@gp_webpack.error_handler'
+

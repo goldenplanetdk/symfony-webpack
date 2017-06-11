@@ -1,0 +1,16 @@
+services:
+
+    gp_webpack.directory_provider.bundles:
+        class: GoldenPlanet\WebpackBundle\Provider\DirectoryProvider\BundlesDirectoryProvider
+        public: false
+        arguments:
+            - '@kernel'
+            - '/Resources/views'
+            - '%gp_webpack.enabled_bundles%'
+
+    gp_webpack.directory_provider.configured:
+        class: GoldenPlanet\WebpackBundle\Provider\DirectoryProvider\ConfiguredDirectoryProvider
+        public: false
+        arguments:
+            - '%gp_webpack.twig_directories%'
+

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    {% webpack named css 'vendor' %}
+        <link rel="stylesheet" href="{{ asset_url }}" id="vendor-css"/>
+    {% end_webpack %}
+</head>
+<body>
+
+{% webpack named js 'vendor' %}
+    <script src="{{ asset_url }}" id="vendor-js"></script>
+{% end_webpack %}
+
+</body>
+</html>

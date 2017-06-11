@@ -2,16 +2,18 @@
 
 namespace GoldenPlanet\WebpackBundle\Command;
 
-use GoldenPlanet\WebpackBundle\Compiler\WebpackCompiler;
+use GoldenPlanet\WebpackBundle\Command\Traits\CommandHelpTrait;
+use GoldenPlanet\WebpackBundle\Webpack\Compiler\WebpackCompiler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
 /**
- * Runs webpack with `--watch` argument
+ * Runs webpack with `--watch` argument.
  */
-class WatchCommand extends Command {
+class WatchCommand extends Command
+{
+	use CommandHelpTrait;
 
 	private $compiler;
 
@@ -29,38 +31,22 @@ class WatchCommand extends Command {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
-	protected function configure() {
+	protected function configure()
+	{
 		$this
 			->setName('webpack:watch')
-			->setDescription('Compile and watch webpack assets')
-			->setHelp(<<<EOT
-The <info>%command.name%</info> command compiles webpack assets and watches for change.
-
-    <info>%command.full_name%</info>
-
-Pass the --env=prod flag to compile for production.
-
-    <info>%command.full_name% --env=prod</info>
-EOT
-			);
+			->setDescription(Description::WATCH)
+			->setHelp($this->getWatchCommandHelp())
+		;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
-
-		$this->compiler->compileAndWatch(
-			function ($type, $buffer) use ($output) {
-
-				if (Process::ERR === $type) {
-					$output->write('<error>' . $buffer . '</error>');
-				} else {
-					$output->write($buffer);
-				}
-			}
-		);
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
+		$this->compiler->compileAndWatch($output);
 	}
 }

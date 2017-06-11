@@ -5,8 +5,8 @@ namespace GoldenPlanet\WebpackBundle\Exception;
 use Exception;
 use RuntimeException;
 
-class InvalidContextException extends RuntimeException {
-
+class InvalidContextException extends RuntimeException
+{
 	/**
 	 * @var mixed
 	 */
@@ -18,7 +18,8 @@ class InvalidContextException extends RuntimeException {
 	 * @param int            $code
 	 * @param Exception|null $previous
 	 */
-	public function __construct($message, $context, $code = 0, Exception $previous = null) {
+	public function __construct($message, $context, $code = 0, Exception $previous = null)
+	{
 		parent::__construct($message, $code, $previous);
 		$this->context = $context;
 	}
@@ -26,7 +27,8 @@ class InvalidContextException extends RuntimeException {
 	/**
 	 * @return mixed
 	 */
-	public function getContext() {
+	public function getContext()
+	{
 		return $this->context;
 	}
 }

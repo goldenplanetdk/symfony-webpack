@@ -1,0 +1,5 @@
+webpack_test:
+    resource: '@TestWebpackBundle/Resources/config/routing.yml'
+
+commons_chunk_test:
+    resource: '@TestCommonsChunkBundle/Resources/config/routing.yml'
