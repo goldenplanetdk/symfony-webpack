@@ -28,7 +28,7 @@ Add to `AppKernel`:
 new GoldenPlanet\WebpackBundle\GoldenPlanetWebpackBundle(),
 ```
 
-Generate `symfony-webpack.config.js` and install dependencies:
+Generate `webpack.symfony.config.js` and install dependencies:
 
 ```
 app/console webpack:setup
@@ -38,6 +38,35 @@ app/console webpack:setup
 
 Usage
 ===
+
+Twig function and tag
+----
+
+You can choose between `webpack_asset` function and `webpack` tag
+
+#### `webpack_asset` function
+```
+webpack_asset(resource, type = null)
+```
+
+`type` is `js` or `css`, leave `null` to guess the type. For `css` this function could return `null` if no CSS would
+be extracted from provided entry point. If you are sure that there will be some CSS, you could just ignore this.
+Otherwise, you could use `webpack` tag as it handles this for you (omits the `<link/>` tag entirely in that case).
+
+#### `webpack` tag
+```twig
+{% webpack [js|css] [named] [group=...] resource [resource, ...] %}
+    Content that will be repeated for each compiled resource.
+    {{ asset_url }} - inside this block this variable holds generated URL for current resource
+{% end_webpack %}
+```
+
+As with `webpack_asset` function, provide `js`, `css` or leave it out to guess the type.
+
+See usage with `named` and `group` in [Commons chunk](#commons-chunk) section.
+
+Keep in mind that you must provide hard-coded asset paths in both tag and function.
+This is to find all available assets in compile-time.
 
 Scripts and Stylesheets
 ----
@@ -55,19 +84,19 @@ Multiple entry points:
 
 ```twig
 {% webpack js
-	'@acmeHello/main.js'
-	'@acmeHello/another-entry-point.js'
+    '@acmeHello/main.js'
+    '@acmeHello/another-entry-point.js'
 %}
-	<script defer src="{{ asset_url }}"><script>
+    <script defer src="{{ asset_url }}"><script>
 {% end_webpack %}
 ```
 
 ```twig
 {% webpack css
-	'@acmeHello/main.js'
-	'@acmeHello/another-entry-point.js'
+    '@acmeHello/main.js'
+    '@acmeHello/another-entry-point.js'
 %}
-	<link rel="stylesheet" href="{{ asset_url }}"><script>
+    <link rel="stylesheet" href="{{ asset_url }}"><script>
 {% end_webpack %}
 ```
 
@@ -76,14 +105,45 @@ To avoid having a `link` element with an empty `href` in the DOM when the script
 ```twig
 {% set cssUrl = webpack_asset('@acmeHello/script.js', 'css') %}
 {% if cssUrl %}
-	<link rel="stylesheet" href="{{ cssUrl }}">
+    <link rel="stylesheet" href="{{ cssUrl }}">
 {% endif %}
 ```
+
+Commons chunk
+----
+
+This bundle supports both single and several
+[commons chunks](https://webpack.js.org/plugins/commons-chunk-plugin/),
+but you have to configure this explicitly.
+
+In your `webpack.config.js`:
+
+```js
+config.plugins.push(
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'commons'
+    })
+);
+```
+
+In your base template:
+
+```twig
+{% webpack named css 'commons' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+{% end_webpack %}
+{# ... #}
+{% webpack named js 'commons' %}
+    <script src="{{ asset_url }}"></script>
+{% end_webpack %}
+```
+
+You can also use `webpack_named_asset` twig function instead of `webpack` tags.
 
 Named commons chunk
 ---
 
-In webpack configuration it is allowed to put commonly used libraries (shared dependencies) in a separate file, while still having reference to the same singleton library when using `require`. For example, to put `jquery` and `lodash` to a separate file (a commons chunk) add following to your `symfony-webpack.config.js`:
+In webpack configuration it is allowed to put commonly used libraries (shared dependencies) in a separate file, while still having reference to the same singleton library when using `require`. For example, to put `jquery` and `lodash` to a separate file (a commons chunk) add following to your `webpack.symfony.config.js`:
 
 ```js
 module.exports = function makeWebpackConfig(symfonyOptions) {

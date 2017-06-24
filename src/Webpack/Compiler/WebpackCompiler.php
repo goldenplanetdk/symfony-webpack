@@ -114,7 +114,7 @@ class WebpackCompiler
 
 		$process = $this->webpackProcessBuilder->buildDevServerProcess($config, $isDevServer);
 
-		if (!unlink($this->manifestJsonPath)) {
+		if (file_exists($this->manifestJsonPath) && !unlink($this->manifestJsonPath)) {
 			throw new RuntimeException('Cannot delete manifest JSON file at ' . $this->manifestJsonPath);
 		}
 
