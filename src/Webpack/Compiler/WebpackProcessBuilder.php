@@ -110,7 +110,7 @@ class WebpackProcessBuilder
 		}
 
 		$processBuilder->setTimeout(0);
-		$processBuilder->setEnv('WEBPACK_MODE', 'watch');
+		$processBuilder->setEnv('WEBPACK_MODE', $isDevServer ? 'server' : 'watch');
 
 		$process = $this->buildProcess($processBuilder);
 
