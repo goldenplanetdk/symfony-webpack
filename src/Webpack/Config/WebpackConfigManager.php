@@ -27,7 +27,7 @@ class WebpackConfigManager
 		AliasProvider $aliasProvider,
 		AssetCollector $assetCollector,
 		WebpackConfigDumper $configDumper,
-		string $configPath,
+		$configPath,
 		AssetResolver $assetResolver,
 		AssetNameGenerator $assetNameGenerator,
 		ErrorHandlerInterface $errorHandler

@@ -13,8 +13,7 @@ matrix:
     include:
 
         # install vendor packages with lowest version
-#        - php: 5.4
-#          env: COMPOSER_ARGS="--prefer-lowest"
+        - php: 5.6
 
         # install vendor packages with newest version and run Codeception with coverage
         - php: 7.1

@@ -113,8 +113,11 @@ class AssetManager
 
 		if (!isset($this->manifest[$assetName])) {
 
-			$assetDescription = $exceptionInfo['assetDescription'] ?? "'$assetName'";
-			$errorDescription = ($exceptionInfo['errorDescription'] ?? '') . ' Is webpack:dev-server running in the background?';
+			$assetDescription = isset($exceptionInfo['assetDescription']) ? $exceptionInfo['assetDescription'] : "'$assetName'";
+
+			$errorDescription = (isset($exceptionInfo['errorDescription']) ? $exceptionInfo['errorDescription'] : '')
+				. ' Is webpack:dev-server running in the background?'
+			;
 
 			throw new RuntimeException(
 				sprintf('No information in manifest for %s. %s', $assetDescription, trim($errorDescription))
