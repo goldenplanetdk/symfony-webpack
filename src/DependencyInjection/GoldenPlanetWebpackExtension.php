@@ -85,7 +85,7 @@ class GoldenPlanetWebpackExtension extends Extension
 			$config['aliases']['additional']
 			+ [
 				'app' => '%kernel.root_dir%/Resources/assets',
-				'root' => '%kernel.root_dir%/..',
+				'root' => '%kernel.root_dir%',
 			];
 
 		$container->setParameter('gp_webpack.aliases.additional', $additionalAliases);

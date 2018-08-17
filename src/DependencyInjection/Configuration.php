@@ -197,7 +197,7 @@ class Configuration implements ConfigurationInterface
 
 		$binNodeChildren
 			->scalarNode('working_directory')
-			->defaultValue('%kernel.root_dir%/..')
+			->defaultValue('%kernel.root_dir%')
 		;
 
 		/**

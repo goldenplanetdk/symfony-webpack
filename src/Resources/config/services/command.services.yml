@@ -28,5 +28,5 @@ services:
         arguments:
             - '@gp_webpack.file_path.package_json'
             - '@gp_webpack.file_path.webpack_config.default'
-            - '%kernel.root_dir%/..'
+            - '%kernel.root_dir%'
             - '%kernel.root_dir%/config'

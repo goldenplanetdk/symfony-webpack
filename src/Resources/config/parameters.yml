@@ -14,7 +14,7 @@ parameters:
     gp_webpack.aliases.path_in_bundle: ''
     gp_webpack.aliases.additional: ''
 
-    # Webpack working dir. Default is '%kernel.root_dir%/..'
+    # Webpack working dir. Default is '%kernel.root_dir%'
     gp_webpack.bin.working_directory: ''
 
     # Webpack executables
