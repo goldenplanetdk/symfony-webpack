@@ -16,9 +16,9 @@
         "raw-loader": "^0.5.1",
         "sass-loader": "^6.0.5",
         "style-loader": "^0.18.2",
-        "webpack": "^2.2.0",
-        "webpack-dashboard": "^0.4.0",
-        "webpack-dev-server": "^2.2.0"
+        "webpack": "^4.41.4",
+        "webpack-dashboard": "^3.2.0",
+        "webpack-dev-server": "^3.10.1"
     },
     "babel": {
         "presets": [
